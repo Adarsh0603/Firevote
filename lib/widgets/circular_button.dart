@@ -1,0 +1,19 @@
+import 'package:firevote/constants.dart';
+import 'package:flutter/material.dart';
+
+class CircularButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return OutlineButton(
+      onPressed: () {},
+      borderSide: BorderSide(color: kAccentColor),
+      child: Icon(
+        Icons.add,
+        size: 35.0,
+        color: kAccentColor,
+      ),
+      padding: EdgeInsets.all(15.0),
+      shape: CircleBorder(),
+    );
+  }
+}
