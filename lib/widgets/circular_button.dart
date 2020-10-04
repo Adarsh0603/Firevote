@@ -7,10 +7,7 @@ class CircularButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlineButton(
-      onPressed: () async {
-        await Provider.of<VoteRoom>(context, listen: false)
-            .createVoteRoom('My room');
-      },
+      onPressed: () async {},
       borderSide: BorderSide(color: kAccentColor),
       child: Icon(
         Icons.add,

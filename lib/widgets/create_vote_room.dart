@@ -11,15 +11,20 @@ class CreateVoteRoom extends StatefulWidget {
 }
 
 class _CreateVoteRoomState extends State<CreateVoteRoom> {
-  List<VoteField> inputList = [];
+  List<VoteField> inputList = [
+    VoteField(fieldName: 'Vote Field 1'),
+    VoteField(fieldName: 'Vote Field 2')
+  ];
   final _formKey = GlobalKey<FormState>();
   String roomName;
+
   void onFormSave() async {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
-
+    Map<String, String> voteFields = Map.fromIterable(inputList,
+        key: (e) => e.fieldName, value: (e) => e.fieldValue);
     await Provider.of<VoteRoom>(context, listen: false)
-        .createVoteRoom(roomName);
+        .createVoteRoom(roomName, voteFields);
   }
 
   void addField() {
@@ -28,17 +33,23 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
     });
   }
 
+  void removeField() {
+    setState(() {
+      inputList.removeLast();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(24),
+      padding: EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 0),
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Create Vote Room'),
+//            Text('Create Vote Room', style: kHeadingTextStyle),
             TextFormField(
               validator: (value) {
                 if (value.isEmpty)
@@ -51,10 +62,14 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
                 roomName = value;
               },
             ),
+            SizedBox(height: 20),
+            Text('Vote Fields', style: kHeadingTextStyle),
             Expanded(
               child: ListView(
                 children: List.generate(inputList.length, (index) {
                   return TextFormField(
+                    validator: (value) =>
+                        value.isEmpty ? 'Vote field cannot be empty!' : null,
                     decoration:
                         InputDecoration(hintText: inputList[index].fieldName),
                     onSaved: (value) {
@@ -64,15 +79,30 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
                 }),
               ),
             ),
-            AddFieldButton(onPressed: addField),
             SizedBox(height: 10),
-            Center(
-              child: FlatButton(
-                color: kPrimaryColor,
-                child: Text('Create Room'),
-                onPressed: onFormSave,
+
+            Container(
+              color: Colors.white,
+              child: Row(
+                children: [
+                  CustomIconButton(
+                    onPressed: inputList.length <= 2 ? null : removeField,
+                    iconData: Icons.remove,
+                  ),
+                  CustomIconButton(
+                    onPressed: inputList.length >= 6 ? null : addField,
+                    iconData: Icons.add,
+                  ),
+                  Spacer(),
+                  FlatButton(
+                    child: Text('Create Room'),
+                    onPressed: onFormSave,
+                  ),
+                  SizedBox(width: 5),
+                ],
               ),
-            )
+            ),
+            SizedBox(height: 10),
           ],
         ),
       ),

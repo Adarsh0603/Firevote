@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class CreateJoinRoom extends StatelessWidget {
   void createRoom(BuildContext context) async {
     showBottomSheet(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Colors.grey[100],
         context: context,
         builder: (ctx) => CreateVoteRoom());
   }

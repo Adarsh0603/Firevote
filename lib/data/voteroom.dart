@@ -9,11 +9,13 @@ class VoteRoom with ChangeNotifier {
     _user = user;
   }
 
-  Future<void> createVoteRoom(String roomName) async {
+  Future<void> createVoteRoom(
+      String roomName, Map<String, String> voteFields) async {
     final response = await _fireStore.collection('rooms').add({
       'roomName': roomName,
       'creatorName': _user.displayName,
-      'creatorId': _user.uid
+      'creatorId': _user.uid,
+      'voteFields': voteFields
     });
     print(response);
   }

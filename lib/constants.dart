@@ -8,3 +8,5 @@ const kAccentColor = Color(0xffc0a062);
 
 const kAuthFormInputDecoration = InputDecoration(hintText: 'Name');
 const kRoomFormInputDecoration = InputDecoration(hintText: 'Room Name');
+//Room Form
+const kHeadingTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
