@@ -1,5 +1,6 @@
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/widgets/create_vote_room.dart';
+import 'package:firevote/widgets/join_vote_room.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,12 @@ class CreateJoinRoom extends StatelessWidget {
         builder: (ctx) => CreateVoteRoom());
   }
 
-  void joinRoom(BuildContext context) async {}
+  void joinRoom(BuildContext context) async {
+    showBottomSheet(
+        backgroundColor: Colors.grey[100],
+        context: context,
+        builder: (ctx) => JoinVoteRoom());
+  }
 
   @override
   Widget build(BuildContext context) {

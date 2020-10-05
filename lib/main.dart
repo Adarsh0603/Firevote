@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firevote/constants.dart';
 import 'package:firevote/data/auth.dart';
+import 'package:firevote/data/joinroom.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/screens/splash_screen.dart';
 import 'package:firevote/screens/wrapper.dart';
@@ -23,7 +24,9 @@ class App extends StatelessWidget {
         ChangeNotifierProxyProvider<Auth, VoteRoom>(
           create: (BuildContext context) => VoteRoom(),
           update: (BuildContext context, auth, voteRoom) => voteRoom..update(),
-        )
+        ),
+        ChangeNotifierProvider<JoinRoom>(
+            create: (BuildContext context) => JoinRoom()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
