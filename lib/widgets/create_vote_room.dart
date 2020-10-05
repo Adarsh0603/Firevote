@@ -25,6 +25,7 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
         key: (e) => e.fieldName, value: (e) => e.fieldValue);
     await Provider.of<VoteRoom>(context, listen: false)
         .createVoteRoom(roomName, voteFields);
+    Navigator.pop(context);
   }
 
   void addField() {
@@ -80,7 +81,6 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
               ),
             ),
             SizedBox(height: 10),
-
             Container(
               color: Colors.white,
               child: Row(
