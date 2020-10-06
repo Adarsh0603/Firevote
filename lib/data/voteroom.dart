@@ -8,6 +8,8 @@ class VoteRoom with ChangeNotifier {
   bool _isActive = false;
   String _roomId;
   final _fireStore = FirebaseFirestore.instance;
+  DocumentSnapshot currentDoc;
+
   void initializeUser(User user) {
     _user = user;
   }
@@ -20,11 +22,17 @@ class VoteRoom with ChangeNotifier {
 
   Future<void> createVoteRoom(
       String roomName, Map<String, String> voteFields) async {
+    Map votes = {};
+    voteFields.forEach((key, value) {
+      votes[key] = 0;
+    });
+
     final response = await _fireStore.collection('rooms').add({
       'roomName': roomName,
       'creatorName': _user.displayName,
       'creatorId': _user.uid,
-      'voteFields': voteFields
+      'voteFields': voteFields,
+      'votes': votes,
     });
     _roomId = response.id;
     await _fireStore
@@ -42,38 +50,39 @@ class VoteRoom with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getRoomId() async {
+  Future<bool> getRoomId() async {
     final response = await _fireStore
         .collection('rooms')
         .where('creatorId', isEqualTo: _user.uid)
         .where('isActive', isEqualTo: true)
         .get();
-
-    if (response == null) {
+    print(response);
+    if (response.docs.length == 0) {
       final response = await _fireStore
           .collection('rooms')
-          .where('members', arrayContains: user.uid)
+          .where('members', arrayContains: _user.uid)
           .get();
       _roomId = response.docs[0].id;
-      return;
+      return false;
     }
     _roomId = response.docs[0].id;
+    return true;
   }
 
   Future<void> getActiveRoom() async {
-    await getRoomId();
+    bool isCreator = await getRoomId();
     final roomDetails = await _fireStore.collection('rooms').doc(_roomId).get();
     print(roomDetails.data());
     Room activeRoomFromDb = Room(
       creatorName: roomDetails.data()['creatorName'],
       roomName: roomDetails.data()['roomName'],
       roomId: _roomId,
-      creatorId: _user.uid,
+      creatorId: isCreator ? _user.uid : roomDetails.data()['creatorId'],
       voteFields: roomDetails.data()['voteFields'],
     );
     _roomDetails = activeRoomFromDb;
     _isActive = true;
-
+    currentDoc = roomDetails;
     notifyListeners();
   }
 
@@ -91,12 +100,20 @@ class VoteRoom with ChangeNotifier {
     });
 
     _roomDetails = joinedRoom;
+    currentDoc = response;
     notifyListeners();
   }
 
   void leaveRoom() {
     _roomDetails = null;
     notifyListeners();
+  }
+
+  Future<void> vote(String field) async {
+    await _fireStore
+        .collection('rooms')
+        .doc(_roomId)
+        .update({'votes.$field': FieldValue.increment(1)});
   }
 
   void update() {}

@@ -1,4 +1,3 @@
-import 'package:firevote/data/joinroom.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/widgets/vote_tile.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,7 @@ class JoinedRoom extends StatelessWidget {
           SizedBox(height: 20),
           Text(joinedRoom.roomDetails.roomId ?? 'default'),
           ...joinedRoom.roomDetails.voteFields.entries.map((field) {
-            return VoteTile(field.value);
+            return VoteTile(field.value, field.key);
           }).toList(),
           FlatButton(
             child: Text('LeaveRoom'),

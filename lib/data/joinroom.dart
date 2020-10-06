@@ -13,6 +13,7 @@ class JoinRoom with ChangeNotifier {
     Room joinedRoom = Room(
         creatorName: roomData['creatorName'],
         roomName: roomData['roomName'],
+        creatorId: roomData['creatorId'],
         voteFields: roomData['voteFields'],
         roomId: roomData['roomId']);
     _roomDetails = joinedRoom;

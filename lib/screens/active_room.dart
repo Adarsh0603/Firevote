@@ -22,7 +22,7 @@ class ActiveRoom extends StatelessWidget {
           SizedBox(height: 20),
           Text(voteRoom.roomDetails.roomId),
           ...voteRoom.roomDetails.voteFields.entries.map((field) {
-            return VoteTile(field.value);
+            return VoteTile(field.value, field.key);
           }).toList(),
         ],
       ),

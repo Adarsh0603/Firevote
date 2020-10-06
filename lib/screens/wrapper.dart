@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firevote/data/auth.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/screens/auth_screen.dart';
 import 'package:firevote/screens/home_screen.dart';
@@ -17,6 +16,7 @@ class Wrapper extends StatelessWidget {
         else {
           Provider.of<VoteRoom>(context, listen: false)
               .initializeUser(snapshot.data);
+          print('homebuild');
           return HomeScreen();
         }
       },

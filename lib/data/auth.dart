@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Auth with ChangeNotifier {
-  User _user;
   GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<void> signInWithGoogle() async {
@@ -19,7 +18,7 @@ class Auth with ChangeNotifier {
     print(authResult);
   }
 
-  void initializeUser(User user) {
-    _user = user;
-  }
+//  void initializeUser(User user) {
+//    _user = user;
+//  }
 }

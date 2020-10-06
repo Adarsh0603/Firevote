@@ -1,5 +1,4 @@
 import 'package:firevote/constants.dart';
-import 'package:firevote/data/joinroom.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

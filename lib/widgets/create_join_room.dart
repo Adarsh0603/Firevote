@@ -1,8 +1,6 @@
-import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/widgets/create_vote_room.dart';
 import 'package:firevote/widgets/join_vote_room.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CreateJoinRoom extends StatelessWidget {
   void createRoom(BuildContext context) async {
