@@ -2,6 +2,7 @@ import 'package:firevote/constants.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/modals/votefield.dart';
 import 'package:firevote/widgets/add_field_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,18 +65,28 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
               },
             ),
             SizedBox(height: 20),
-            Text('Vote Fields', style: kHeadingTextStyle),
+            Text('Enter Vote Fields', style: kHeadingTextStyle),
+            SizedBox(height: 10),
             Expanded(
               child: ListView(
                 children: List.generate(inputList.length, (index) {
-                  return TextFormField(
-                    validator: (value) =>
-                        value.isEmpty ? 'Vote field cannot be empty!' : null,
-                    decoration:
-                        InputDecoration(hintText: inputList[index].fieldName),
-                    onSaved: (value) {
-                      inputList[index].fieldValue = value;
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Material(
+                      elevation: 2,
+                      child: TextFormField(
+                        validator: (value) => value.isEmpty
+                            ? 'Vote field cannot be empty!'
+                            : null,
+                        decoration: InputDecoration(
+                            hintText: inputList[index].fieldName,
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.only(left: 8)),
+                        onSaved: (value) {
+                          inputList[index].fieldValue = value;
+                        },
+                      ),
+                    ),
                   );
                 }),
               ),

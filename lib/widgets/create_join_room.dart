@@ -20,19 +20,34 @@ class CreateJoinRoom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FlatButton(
-            color: Colors.greenAccent,
-            child: Text('Create Voteroom'),
-            onPressed: () => createRoom(context),
-          ),
-          FlatButton(
-            child: Text('Join Voteroom'),
-            onPressed: () => joinRoom(context),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Material(
+              elevation: 1,
+              child: ListTile(
+                title: Text(
+                  'Create Voteroom',
+                  textAlign: TextAlign.center,
+                ),
+                onTap: () => createRoom(context),
+              ),
+            ),
+            SizedBox(height: 20),
+            Material(
+              elevation: 1,
+              child: ListTile(
+                title: Text(
+                  'Join Voteroom',
+                  textAlign: TextAlign.center,
+                ),
+                onTap: () => joinRoom(context),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

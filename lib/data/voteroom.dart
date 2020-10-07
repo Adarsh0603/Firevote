@@ -91,19 +91,25 @@ class VoteRoom with ChangeNotifier {
   }
 
   Future<void> joinRoom(String roomId) async {
-    final response = await _fireStore.collection('rooms').doc(roomId).get();
-    final roomData = response.data();
-    Room joinedRoom = Room(
-        creatorName: roomData['creatorName'],
-        roomName: roomData['roomName'],
-        creatorId: roomData['creatorId'],
-        voteFields: roomData['voteFields'],
-        roomId: roomId);
-
-    _roomId = roomId;
-    _roomDetails = joinedRoom;
-    currentDoc = response;
-    notifyListeners();
+    try {
+      final response = await _fireStore.collection('rooms').doc(roomId).get();
+      final roomData = response.data();
+      Room joinedRoom = Room(
+          creatorName: roomData['creatorName'],
+          roomName: roomData['roomName'],
+          creatorId: roomData['creatorId'],
+          voteFields: roomData['voteFields'],
+          roomId: roomId);
+      await _fireStore.collection('rooms').doc(roomId).update({
+        'members': FieldValue.arrayUnion([_user.uid])
+      });
+      _roomId = roomId;
+      _roomDetails = joinedRoom;
+      currentDoc = response;
+      notifyListeners();
+    } catch (e) {
+      throw 'Cannot join room';
+    }
   }
 
   void leaveRoom() {
