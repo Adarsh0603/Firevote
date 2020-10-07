@@ -1,16 +1,14 @@
+import 'package:firevote/data/auth.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/widgets/join_vote_room.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
-  void joinRoom(BuildContext context) async {
+  void signOut(BuildContext context) async {
     Navigator.of(context).pop();
 
-    showBottomSheet(
-        backgroundColor: Colors.grey[100],
-        context: context,
-        builder: (ctx) => JoinVoteRoom());
+    await Provider.of<Auth>(context, listen: false).signOut();
   }
 
   @override
@@ -35,8 +33,8 @@ class AppDrawer extends StatelessWidget {
               onTap: () {},
             ),
             ListTile(
-              title: Text('Join Room'),
-              onTap: () => joinRoom(context),
+              title: Text('Sign Out'),
+              onTap: () => signOut(context),
             ),
           ],
         ),

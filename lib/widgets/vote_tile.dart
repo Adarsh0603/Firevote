@@ -8,7 +8,7 @@ class VoteTile extends StatelessWidget {
 
   VoteTile(this.title, this.field);
   void onVote(BuildContext context) async {
-    await Provider.of<VoteRoom>(context, listen: false).vote(field);
+    await Provider.of<VoteRoom>(context, listen: false).vote(field, title);
   }
 
   @override

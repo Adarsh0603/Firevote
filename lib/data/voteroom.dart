@@ -95,9 +95,6 @@ class VoteRoom with ChangeNotifier {
         creatorId: roomData['creatorId'],
         voteFields: roomData['voteFields'],
         roomId: roomData['roomId']);
-    await _fireStore.collection('rooms').doc(roomId).update({
-      'members': FieldValue.arrayUnion([user.uid])
-    });
 
     _roomDetails = joinedRoom;
     currentDoc = response;
@@ -109,11 +106,21 @@ class VoteRoom with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> vote(String field) async {
+  Future<void> vote(String field, String title) async {
+    var doc = await _fireStore.collection('rooms').doc(_roomId).get();
+    List voteList = doc.data()['voted'] as List;
+    print(voteList.indexWhere((element) => element['uid'] == _user.uid));
+    if (voteList.indexWhere((element) => element['uid'] == _user.uid) != -1)
+      return;
     await _fireStore
         .collection('rooms')
         .doc(_roomId)
         .update({'votes.$field': FieldValue.increment(1)});
+    await _fireStore.collection('rooms').doc(_roomId).update({
+      'voted': FieldValue.arrayUnion([
+        {'uid': user.uid, 'name': user.displayName, 'voteTo': title}
+      ])
+    });
   }
 
   void update() {}

@@ -18,6 +18,11 @@ class Auth with ChangeNotifier {
     print(authResult);
   }
 
+  Future<void> signOut() async {
+    await _googleSignIn.signOut();
+    await FirebaseAuth.instance.signOut();
+  }
+
 //  void initializeUser(User user) {
 //    _user = user;
 //  }
