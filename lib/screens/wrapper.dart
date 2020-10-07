@@ -16,7 +16,6 @@ class Wrapper extends StatelessWidget {
         else {
           Provider.of<VoteRoom>(context, listen: false)
               .initializeUser(snapshot.data);
-          print('homebuild');
           return HomeScreen();
         }
       },

@@ -1,3 +1,4 @@
+import 'package:firevote/constants.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/widgets/vote_tile.dart';
 import 'package:flutter/material.dart';
@@ -15,20 +16,38 @@ class JoinedRoom extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(joinedRoom.roomDetails.roomName),
-              Text(joinedRoom.roomDetails.creatorName),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(joinedRoom.roomDetails.roomName,
+                      style: kRoomNameTextStyle),
+                  Text(
+                    'ID - ${joinedRoom.roomDetails.roomId ?? 'default'}',
+                    style: kRoomIdTextStyle,
+                  ),
+                ],
+              ),
+              Text('Created By-\n${joinedRoom.roomDetails.creatorName}',
+                  style: kRoomCreatorTextStyle),
             ],
           ),
           SizedBox(height: 20),
-          Text(joinedRoom.roomDetails.roomId ?? 'default'),
           ...joinedRoom.roomDetails.voteFields.entries.map((field) {
             return VoteTile(field.value, field.key);
           }).toList(),
-          FlatButton(
-            child: Text('LeaveRoom'),
-            onPressed: () {
-              joinedRoom.leaveRoom();
-            },
+          Spacer(),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FlatButton(
+              color: Colors.red,
+              child: Text(
+                'Leave Room',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                joinedRoom.leaveRoom();
+              },
+            ),
           ),
         ],
       ),

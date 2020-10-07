@@ -17,8 +17,11 @@ class VoteRoom with ChangeNotifier {
   User get user => _user;
   Room _roomDetails;
   Room get roomDetails => _roomDetails;
-
   bool get isRoomActive => _isActive;
+
+  Stream get votes {
+    return _fireStore.collection('rooms').doc(_roomId).snapshots();
+  }
 
   Future<void> createVoteRoom(
       String roomName, Map<String, String> voteFields) async {
@@ -33,6 +36,7 @@ class VoteRoom with ChangeNotifier {
       'creatorId': _user.uid,
       'voteFields': voteFields,
       'votes': votes,
+      'voted': [],
     });
     _roomId = response.id;
     await _fireStore
@@ -94,8 +98,9 @@ class VoteRoom with ChangeNotifier {
         roomName: roomData['roomName'],
         creatorId: roomData['creatorId'],
         voteFields: roomData['voteFields'],
-        roomId: roomData['roomId']);
+        roomId: roomId);
 
+    _roomId = roomId;
     _roomDetails = joinedRoom;
     currentDoc = response;
     notifyListeners();
@@ -106,12 +111,24 @@ class VoteRoom with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> vote(String field, String title) async {
+  Future<void> closeRoom() async {
+    await _fireStore
+        .collection('rooms')
+        .doc(_roomId)
+        .update({'isActive': false});
+    _isActive = false;
+    _roomDetails = null;
+    _roomId = null;
+    notifyListeners();
+  }
+
+  Future<bool> vote(String field, String title) async {
     var doc = await _fireStore.collection('rooms').doc(_roomId).get();
+    print(_roomId);
     List voteList = doc.data()['voted'] as List;
-    print(voteList.indexWhere((element) => element['uid'] == _user.uid));
-    if (voteList.indexWhere((element) => element['uid'] == _user.uid) != -1)
-      return;
+    if (voteList.indexWhere((element) => element['uid'] == _user.uid) != -1) {
+      throw 'You have already voted.';
+    }
     await _fireStore
         .collection('rooms')
         .doc(_roomId)
@@ -121,6 +138,12 @@ class VoteRoom with ChangeNotifier {
         {'uid': user.uid, 'name': user.displayName, 'voteTo': title}
       ])
     });
+    return true;
+  }
+
+  void signingOut() {
+    _roomDetails = null;
+    notifyListeners();
   }
 
   void update() {}

@@ -24,6 +24,20 @@ class ActiveRoom extends StatelessWidget {
           ...voteRoom.roomDetails.voteFields.entries.map((field) {
             return VoteTile(field.value, field.key);
           }).toList(),
+          Spacer(),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FlatButton(
+              color: Colors.red,
+              child: Text(
+                'Close Room',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () async {
+                await voteRoom.closeRoom();
+              },
+            ),
+          ),
         ],
       ),
     );

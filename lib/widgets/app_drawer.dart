@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class AppDrawer extends StatelessWidget {
   void signOut(BuildContext context) async {
     Navigator.of(context).pop();
-
+    Provider.of<VoteRoom>(context, listen: false).signingOut();
     await Provider.of<Auth>(context, listen: false).signOut();
   }
 

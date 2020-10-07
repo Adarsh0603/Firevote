@@ -21,6 +21,7 @@ class Auth with ChangeNotifier {
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await FirebaseAuth.instance.signOut();
+    notifyListeners();
   }
 
 //  void initializeUser(User user) {
