@@ -24,6 +24,7 @@ class _ActiveRoomState extends State<ActiveRoom> {
     votesMapData.forEach((key, value) {
       votesMap[key] = value;
     });
+    voteRoom.updateDoc(doc);
     setState(() {});
   }
 

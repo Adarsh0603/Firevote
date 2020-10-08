@@ -18,6 +18,10 @@ class VoteRoom with ChangeNotifier {
   Room _roomDetails;
   Room get roomDetails => _roomDetails;
   DocumentSnapshot get currentDoc => _currentDoc;
+  void updateDoc(DocumentSnapshot latestDoc) {
+    _currentDoc = latestDoc;
+    notifyListeners();
+  }
 
   Future<void> createVoteRoom(
       String roomName, Map<String, String> voteFields) async {
@@ -142,7 +146,12 @@ class VoteRoom with ChangeNotifier {
     await _fireStore.collection('rooms').doc(_roomId).update({
       'votes.$field': FieldValue.increment(1),
       'voted': FieldValue.arrayUnion([
-        {'uid': user.uid, 'name': user.displayName, 'voteTo': title}
+        {
+          'uid': user.uid,
+          'name': user.displayName,
+          'voteTo': title,
+          'email': user.email
+        }
       ])
     });
     return true;
