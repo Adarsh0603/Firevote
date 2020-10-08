@@ -3,11 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firevote/modals/room.dart';
 import 'package:firevote/utils.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class VoteRoom with ChangeNotifier {
   User _user;
-  bool _isActive = false;
   String _roomId;
   final _fireStore = FirebaseFirestore.instance;
   DocumentSnapshot _currentDoc;
@@ -19,7 +17,6 @@ class VoteRoom with ChangeNotifier {
   User get user => _user;
   Room _roomDetails;
   Room get roomDetails => _roomDetails;
-  bool get isRoomActive => _isActive;
   DocumentSnapshot get currentDoc => _currentDoc;
 
   Future<void> createVoteRoom(
@@ -48,7 +45,6 @@ class VoteRoom with ChangeNotifier {
         roomName: roomName,
         creatorId: _user.uid,
         voteFields: voteFields);
-    _isActive = true;
     _roomDetails = newRoom;
     Utils.saveRoomLocally(id: _roomId, isCreator: true);
     notifyListeners();
@@ -79,12 +75,14 @@ class VoteRoom with ChangeNotifier {
   }
 
   Future<void> getActiveRoom() async {
+    //Uncomment to activate localisation
 //    Map localRoomData = await Utils.fetchRoomLocally();
 //    if (localRoomData == null || !localRoomData.containsKey('roomId')) {
 //      return;
 //    }
 //    bool isCreator = localRoomData['isCreator'];
 //    _roomId = localRoomData['roomId'];
+    //Comment the below line to activate localisation
     bool isCreator = await getRoomId();
     final roomDetails = await _fireStore.collection('rooms').doc(_roomId).get();
     Room activeRoomFromDb = Room(
@@ -95,7 +93,6 @@ class VoteRoom with ChangeNotifier {
       voteFields: roomDetails.data()['voteFields'],
     );
     _roomDetails = activeRoomFromDb;
-    _isActive = true;
     _currentDoc = roomDetails;
     notifyListeners();
   }
@@ -151,12 +148,13 @@ class VoteRoom with ChangeNotifier {
     return true;
   }
 
+  Future<void> getResults() async {}
+
   Future<void> closeRoom() async {
     await _fireStore
         .collection('rooms')
         .doc(_roomId)
         .update({'isActive': false});
-    _isActive = false;
     _roomDetails = null;
     _roomId = null;
     _currentDoc = null;

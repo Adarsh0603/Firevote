@@ -1,6 +1,5 @@
 import 'package:firevote/data/auth.dart';
 import 'package:firevote/data/voteroom.dart';
-import 'package:firevote/widgets/join_vote_room.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
