@@ -79,16 +79,14 @@ class VoteRoom with ChangeNotifier {
   }
 
   Future<void> getActiveRoom() async {
-    Map localRoomData = await Utils.fetchRoomLocally();
-    if (!localRoomData.containsKey('roomId')) {
-      return;
-    }
-    bool isCreator = localRoomData['isCreator'];
-    _roomId = localRoomData['roomId'];
-
-//      bool isCreator = await getRoomId();
+//    Map localRoomData = await Utils.fetchRoomLocally();
+//    if (localRoomData == null || !localRoomData.containsKey('roomId')) {
+//      return;
+//    }
+//    bool isCreator = localRoomData['isCreator'];
+//    _roomId = localRoomData['roomId'];
+    bool isCreator = await getRoomId();
     final roomDetails = await _fireStore.collection('rooms').doc(_roomId).get();
-
     Room activeRoomFromDb = Room(
       creatorName: roomDetails.data()['creatorName'],
       roomName: roomDetails.data()['roomName'],
@@ -150,7 +148,6 @@ class VoteRoom with ChangeNotifier {
         {'uid': user.uid, 'name': user.displayName, 'voteTo': title}
       ])
     });
-
     return true;
   }
 

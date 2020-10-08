@@ -29,10 +29,6 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: Text('Create Room'),
-              onTap: () {},
-            ),
-            ListTile(
               title: Text('Sign Out'),
               onTap: () => signOut(context),
             ),
