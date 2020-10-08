@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firevote/modals/room.dart';
+import 'package:firevote/utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class VoteRoom with ChangeNotifier {
   User _user;
@@ -48,6 +50,7 @@ class VoteRoom with ChangeNotifier {
         voteFields: voteFields);
     _isActive = true;
     _roomDetails = newRoom;
+    Utils.saveRoomLocally(id: _roomId, isCreator: true);
     notifyListeners();
   }
 
@@ -76,9 +79,14 @@ class VoteRoom with ChangeNotifier {
   }
 
   Future<void> getActiveRoom() async {
-    print('getactiveroom called.');
-    bool isCreator = await getRoomId();
-    print('get');
+    Map localRoomData = await Utils.fetchRoomLocally();
+    if (!localRoomData.containsKey('roomId')) {
+      return;
+    }
+    bool isCreator = localRoomData['isCreator'];
+    _roomId = localRoomData['roomId'];
+
+//      bool isCreator = await getRoomId();
     final roomDetails = await _fireStore.collection('rooms').doc(_roomId).get();
 
     Room activeRoomFromDb = Room(
@@ -122,6 +130,7 @@ class VoteRoom with ChangeNotifier {
       _roomId = roomId;
       _roomDetails = joinedRoom;
       _currentDoc = response;
+      Utils.saveRoomLocally(id: _roomId, isCreator: false);
       notifyListeners();
       print('Joined Room Successfully');
     } catch (e) {
@@ -154,16 +163,19 @@ class VoteRoom with ChangeNotifier {
     _roomDetails = null;
     _roomId = null;
     _currentDoc = null;
+    await Utils.deleteRoomLocally();
     notifyListeners();
   }
 
-  void leaveRoom() {
+  void leaveRoom() async {
     _roomDetails = null;
     _currentDoc = null;
+    await Utils.deleteRoomLocally();
     notifyListeners();
   }
 
-  void signingOut() {
+  void signingOut() async {
+    await Utils.deleteRoomLocally();
     _roomDetails = null;
     notifyListeners();
   }

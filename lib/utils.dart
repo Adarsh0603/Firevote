@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Utils {
   static void showSnack(
@@ -9,5 +12,26 @@ class Utils {
       content: Text(content),
       duration: Duration(seconds: 2),
     ));
+  }
+
+  static void saveRoomLocally({String id, bool isCreator}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String roomData = jsonEncode({'roomId': id, 'isCreator': isCreator});
+    prefs.setString('roomData', roomData);
+    print('Saved Local Data : $roomData');
+  }
+
+  static Future<Map<String, dynamic>> fetchRoomLocally() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String roomDataJson = prefs.getString('roomData');
+    Map<String, dynamic> roomData = jsonDecode(roomDataJson);
+    print('Fetched Local Data : $roomDataJson');
+    return roomData;
+  }
+
+  static Future<void> deleteRoomLocally() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print('Deleted Local Data');
+    prefs.clear();
   }
 }
