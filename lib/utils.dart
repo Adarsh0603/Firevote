@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class Utils {
   static void showSnack(
       {@required BuildContext context, @required String content}) {
+    Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(content),
       duration: Duration(seconds: 2),

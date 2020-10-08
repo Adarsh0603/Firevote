@@ -14,13 +14,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Future _getActiveRoom;
+  bool isInit = true;
+
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _getActiveRoom = Future.delayed(Duration.zero).then((_) async {
-      await Provider.of<VoteRoom>(context, listen: false).getActiveRoom();
-    });
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    if (isInit) {
+      _getActiveRoom = Provider.of<VoteRoom>(context, listen: false)
+          .getActiveRoom()
+          .then((_) {
+        isInit = false;
+      });
+    }
   }
 
   @override

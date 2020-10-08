@@ -51,7 +51,6 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-//            Text('Create Vote Room', style: kHeadingTextStyle),
             TextFormField(
               validator: (value) {
                 if (value.isEmpty)
