@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Utils {
@@ -12,6 +13,11 @@ class Utils {
       content: Text(content),
       duration: Duration(seconds: 2),
     ));
+  }
+
+  static void shareId(String id, String roomName) async {
+    Share.share('Firevote Room\nName: $roomName\nRoom Id: $id',
+        subject: 'Firevote Room Id');
   }
 
   static void saveRoomLocally({String id, bool isCreator}) async {
