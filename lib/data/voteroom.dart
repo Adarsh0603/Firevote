@@ -9,6 +9,7 @@ class VoteRoom with ChangeNotifier {
   String _roomId;
   final _fireStore = FirebaseFirestore.instance;
   DocumentSnapshot _currentDoc;
+  bool _isCreator = false;
 
   void initializeUser(User user) {
     _user = user;
@@ -17,11 +18,8 @@ class VoteRoom with ChangeNotifier {
   User get user => _user;
   Room _roomDetails;
   Room get roomDetails => _roomDetails;
+  bool get isCreator => _isCreator;
   DocumentSnapshot get currentDoc => _currentDoc;
-  void updateDoc(DocumentSnapshot latestDoc) {
-    _currentDoc = latestDoc;
-    notifyListeners();
-  }
 
   Future<void> createVoteRoom(
       String roomName, Map<String, String> voteFields) async {
@@ -50,12 +48,12 @@ class VoteRoom with ChangeNotifier {
         creatorId: _user.uid,
         voteFields: voteFields);
     _roomDetails = newRoom;
+    _isCreator = true;
     Utils.saveRoomLocally(id: _roomId, isCreator: true);
     notifyListeners();
   }
 
   Future<bool> getRoomId() async {
-    print('getRoomId');
     try {
       final response = await _fireStore
           .collection('rooms')
@@ -67,10 +65,11 @@ class VoteRoom with ChangeNotifier {
             .collection('rooms')
             .where('members', arrayContains: _user.uid)
             .get();
-        print(response.docs[0].data());
+        _currentDoc = response.docs[0];
         _roomId = response.docs[0].id;
         return false;
       }
+      _currentDoc = response.docs[0];
       _roomId = response.docs[0].id;
       return true;
     } catch (e) {
@@ -87,30 +86,19 @@ class VoteRoom with ChangeNotifier {
 //    bool isCreator = localRoomData['isCreator'];
 //    _roomId = localRoomData['roomId'];
     //Comment the below line to activate localisation
-    bool isCreator = await getRoomId();
-    final roomDetails = await _fireStore.collection('rooms').doc(_roomId).get();
+
+    _isCreator = await getRoomId();
+    final roomDetails = _currentDoc;
     Room activeRoomFromDb = Room(
       creatorName: roomDetails.data()['creatorName'],
       roomName: roomDetails.data()['roomName'],
       roomId: _roomId,
-      creatorId: isCreator ? _user.uid : roomDetails.data()['creatorId'],
+      creatorId: _isCreator ? _user.uid : roomDetails.data()['creatorId'],
       voteFields: roomDetails.data()['voteFields'],
     );
     _roomDetails = activeRoomFromDb;
     _currentDoc = roomDetails;
     notifyListeners();
-  }
-
-  Future<bool> checkIfVoted() async {
-    var voteList = await _currentDoc.data()['voted'] as List;
-    var votedIndex =
-        voteList.indexWhere((element) => element['uid'] == user.uid);
-
-    if (votedIndex == -1) {
-      return false;
-    } else {
-      return true;
-    }
   }
 
   Future<void> joinRoom(String roomId) async {
@@ -129,6 +117,7 @@ class VoteRoom with ChangeNotifier {
       _roomId = roomId;
       _roomDetails = joinedRoom;
       _currentDoc = response;
+      _isCreator = false;
       Utils.saveRoomLocally(id: _roomId, isCreator: false);
       notifyListeners();
       print('Joined Room Successfully');
@@ -157,30 +146,33 @@ class VoteRoom with ChangeNotifier {
     return true;
   }
 
-  Future<void> getResults() async {}
+  void updateDoc(DocumentSnapshot latestDoc) {
+    _currentDoc = latestDoc;
+    notifyListeners();
+  }
 
   Future<void> closeRoom() async {
     await _fireStore
         .collection('rooms')
         .doc(_roomId)
         .update({'isActive': false});
-    _roomDetails = null;
-    _roomId = null;
-    _currentDoc = null;
-    await Utils.deleteRoomLocally();
-    notifyListeners();
+    await resetState();
   }
 
   void leaveRoom() async {
-    _roomDetails = null;
-    _currentDoc = null;
-    await Utils.deleteRoomLocally();
-    notifyListeners();
+    await resetState();
   }
 
   void signingOut() async {
+    await resetState();
+  }
+
+  Future<void> resetState() async {
     await Utils.deleteRoomLocally();
     _roomDetails = null;
+    _roomId = null;
+    _isCreator = false;
+    _currentDoc = null;
     notifyListeners();
   }
 }

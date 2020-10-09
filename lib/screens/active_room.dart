@@ -34,6 +34,7 @@ class _ActiveRoomState extends State<ActiveRoom> {
     super.initState();
     final currentRoom =
         Provider.of<VoteRoom>(context, listen: false).currentDoc;
+    if (currentRoom == null) return;
     final votesMapData = currentRoom.data()['votes'] as Map;
     votesMapData.forEach((key, value) {
       votesMap[key] = value;

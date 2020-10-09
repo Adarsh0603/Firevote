@@ -43,9 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 : Consumer<VoteRoom>(
                     builder: (ctx, room, _) {
                       return room.roomDetails != null
-                          ? room.roomDetails.creatorId == room.user.uid
-                              ? ActiveRoom()
-                              : JoinedRoom()
+                          ? room.isCreator ? ActiveRoom() : JoinedRoom()
                           : CreateJoinRoom();
                     },
                   ),

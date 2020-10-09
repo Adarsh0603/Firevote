@@ -5,6 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class JoinedRoom extends StatelessWidget {
+  bool checkIfVoted(VoteRoom joinedRoom, String fieldValue) {
+    var votersList = joinedRoom.currentDoc.data()['voted'] as List;
+    var selectedFieldIfAny = votersList.firstWhere(
+        (element) => element['voteTo'] == fieldValue,
+        orElse: () => null);
+    print(selectedFieldIfAny);
+    if (selectedFieldIfAny == null) {
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final joinedRoom = Provider.of<VoteRoom>(context, listen: false);
@@ -40,7 +52,8 @@ class JoinedRoom extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ...joinedRoom.roomDetails.voteFields.entries.map((field) {
-              return VoteTile(field.value, field.key);
+              bool wasSelected = checkIfVoted(joinedRoom, field.value);
+              return VoteTile(field.value, field.key, wasSelected);
             }).toList(),
           ],
         ),

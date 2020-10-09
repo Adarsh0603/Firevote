@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 class VoteTile extends StatefulWidget {
   final String title;
   final String field;
-
-  VoteTile(this.title, this.field);
+  final bool wasSelected;
+  VoteTile(this.title, this.field, this.wasSelected);
 
   @override
   _VoteTileState createState() => _VoteTileState();
@@ -59,8 +59,9 @@ class _VoteTileState extends State<VoteTile> {
         child: Container(
           color: Colors.white,
           child: ListTile(
-            leading:
-                hasVoted ? Icon(Icons.check_circle, color: Colors.green) : null,
+            leading: widget.wasSelected
+                ? Icon(Icons.check_circle, color: Colors.green)
+                : null,
             onTap: () => onVote(context),
             title: Text(widget.title),
           ),
