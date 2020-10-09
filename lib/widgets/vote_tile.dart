@@ -7,7 +7,8 @@ class VoteTile extends StatefulWidget {
   final String title;
   final String field;
   final bool wasSelected;
-  VoteTile(this.title, this.field, this.wasSelected);
+  final bool hasAlreadyVoted;
+  VoteTile(this.title, this.field, this.wasSelected, this.hasAlreadyVoted);
 
   @override
   _VoteTileState createState() => _VoteTileState();
@@ -15,15 +16,13 @@ class VoteTile extends StatefulWidget {
 
 class _VoteTileState extends State<VoteTile> {
   bool hasVoted = false;
-  void showSnack(text, context) {
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text(text),
-      duration: Duration(seconds: 1),
-    ));
+  void onRevote(BuildContext context) {
+    Utils.showSnack(context: context, content: 'You have already voted');
   }
 
   void onVote(BuildContext context) async {
     try {
+      final voteRoom = Provider.of<VoteRoom>(context, listen: false);
       showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
@@ -35,11 +34,11 @@ class _VoteTileState extends State<VoteTile> {
                   ],
                 ),
               ));
-      bool result = await Provider.of<VoteRoom>(context, listen: false)
-          .vote(widget.field, widget.title);
+      bool result = await voteRoom.vote(widget.field, widget.title);
       Navigator.of(context, rootNavigator: true).pop();
       if (result)
         Utils.showSnack(context: context, content: 'Voted successfully.');
+      if (!voteRoom.freshVote) voteRoom.setFreshVote();
 
       setState(() {
         hasVoted = true;
@@ -52,6 +51,7 @@ class _VoteTileState extends State<VoteTile> {
 
   @override
   Widget build(BuildContext context) {
+    final voteRoom = Provider.of<VoteRoom>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: Material(
@@ -59,10 +59,12 @@ class _VoteTileState extends State<VoteTile> {
         child: Container(
           color: Colors.white,
           child: ListTile(
-            leading: widget.wasSelected
+            leading: widget.wasSelected || hasVoted
                 ? Icon(Icons.check_circle, color: Colors.green)
                 : null,
-            onTap: () => onVote(context),
+            onTap: () => widget.hasAlreadyVoted || voteRoom.freshVote
+                ? onRevote(context)
+                : onVote(context),
             title: Text(widget.title),
           ),
         ),

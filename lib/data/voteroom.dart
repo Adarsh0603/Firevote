@@ -10,6 +10,7 @@ class VoteRoom with ChangeNotifier {
   final _fireStore = FirebaseFirestore.instance;
   DocumentSnapshot _currentDoc;
   bool _isCreator = false;
+  bool freshVote = false;
 
   void initializeUser(User user) {
     _user = user;
@@ -151,6 +152,32 @@ class VoteRoom with ChangeNotifier {
     notifyListeners();
   }
 
+  bool checkIfVoted(String fieldValue) {
+    var votersList = _currentDoc.data()['voted'] as List;
+    var selectedFieldIfAny = votersList.firstWhere(
+        (element) =>
+            element['voteTo'] == fieldValue && element['uid'] == _user.uid,
+        orElse: () => null);
+    print(selectedFieldIfAny);
+    if (selectedFieldIfAny == null) {
+      return false;
+    }
+    return true;
+  }
+
+  bool get hasAlreadyVoted {
+    var votersList = _currentDoc.data()['voted'] as List;
+    if (votersList.indexWhere((element) => element['uid'] == _user.uid) != -1) {
+      return true;
+    }
+    return false;
+  }
+
+  void setFreshVote() {
+    freshVote = true;
+    notifyListeners();
+  }
+
   Future<void> closeRoom() async {
     await _fireStore
         .collection('rooms')
@@ -173,6 +200,7 @@ class VoteRoom with ChangeNotifier {
     _roomId = null;
     _isCreator = false;
     _currentDoc = null;
+    freshVote = false;
     notifyListeners();
   }
 }
