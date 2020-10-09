@@ -15,7 +15,11 @@ class ActiveRoom extends StatefulWidget {
 
 class _ActiveRoomState extends State<ActiveRoom> {
   Map votesMap = {};
+  bool isGettingResults = false;
   Future<void> getResults(VoteRoom voteRoom) async {
+    setState(() {
+      isGettingResults = true;
+    });
     var doc = await FirebaseFirestore.instance
         .collection('rooms')
         .doc(voteRoom.roomDetails.roomId)
@@ -25,7 +29,10 @@ class _ActiveRoomState extends State<ActiveRoom> {
       votesMap[key] = value;
     });
     voteRoom.updateDoc(doc);
-    setState(() {});
+    setState(() {
+      isGettingResults = false;
+    });
+    Utils.showSnack(context: context, content: 'Updated Results.');
   }
 
   @override
@@ -79,7 +86,8 @@ class _ActiveRoomState extends State<ActiveRoom> {
             Align(
               alignment: Alignment.bottomRight,
               child: FlatButton(
-                child: Text('Get Latest Results'),
+                child: Text(
+                    isGettingResults ? 'Hold On...' : 'Get Latest Results'),
                 onPressed: () async {
                   await getResults(voteRoom);
                 },

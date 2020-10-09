@@ -1,4 +1,5 @@
 import 'package:firevote/data/voteroom.dart';
+import 'package:firevote/widgets/voter_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -71,11 +72,12 @@ class _CreatorVoteTileState extends State<CreatorVoteTile> {
                   Divider(),
                   Container(
                     color: Colors.grey[100],
-                    padding: EdgeInsets.only(left: 8, top: 8),
                     height: 100,
                     child: ListView.builder(
-                        itemBuilder: (ctx, i) => Text(
-                            '${voterList[i]['name']} -${voterList[i]['email']}'),
+                        itemBuilder: (ctx, i) => Container(
+                              child: VoterDetail(voterList[i]['name'],
+                                  voterList[i]['email'], i),
+                            ),
                         itemCount: voterList.length),
                   ),
                 ]
