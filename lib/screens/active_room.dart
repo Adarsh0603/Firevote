@@ -93,6 +93,13 @@ class _ActiveRoomState extends State<ActiveRoom> {
                 },
               ),
             ),
+            FlatButton(
+              child: Text('Post Results'),
+              onPressed: () async {
+                await voteRoom.postResults();
+              },
+            ),
+            SizedBox(height: 50),
             DangerButton(text: 'Close Room', onPressed: voteRoom.closeRoom),
           ],
         ),

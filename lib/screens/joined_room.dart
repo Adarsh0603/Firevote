@@ -45,6 +45,23 @@ class JoinedRoom extends StatelessWidget {
               return VoteTile(
                   field.value, field.key, wasSelected, hasAlreadyVoted);
             }).toList(),
+            SizedBox(height: 20),
+            if (joinedRoom.currentDoc.data()['postResults'] == true) ...[
+              Text('Results'),
+              IconButton(
+                  onPressed: () => joinedRoom.voteResults(),
+                  icon: Icon(
+                    Icons.file_download,
+                    color: Colors.red,
+                  )),
+              DataTable(
+                columns: [
+                  DataColumn(label: Text('Field')),
+                  DataColumn(label: Text('Votes')),
+                ],
+                rows: joinedRoom.voteResults(),
+              )
+            ]
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firevote/modals/room.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class VoteRoom with ChangeNotifier {
   final _fireStore = FirebaseFirestore.instance;
@@ -56,6 +57,7 @@ class VoteRoom with ChangeNotifier {
       'creatorName': _user.displayName,
       'creatorId': _user.uid,
       'voteFields': voteFields,
+      'postResults': false,
       'isActive': true,
       'votes': votes,
       'voted': [],
@@ -165,6 +167,18 @@ class VoteRoom with ChangeNotifier {
     }
   }
 
+  List<DataRow> voteResults() {
+    var voteMap = _currentDoc.data()['votes'] as Map;
+    List<DataRow> voteRows = [];
+    voteMap.forEach((key, value) {
+      voteRows.add(DataRow(cells: [
+        DataCell(Text(_currentDoc.data()['voteFields'][key])),
+        DataCell(Text(value.toString()))
+      ]));
+    });
+    return voteRows;
+  }
+
   //Checks selected voteField
   bool checkVotedField(String fieldValue) {
     print('checkVoteField()');
@@ -178,6 +192,14 @@ class VoteRoom with ChangeNotifier {
       return false;
     }
     return true;
+  }
+
+  //Posts results for all voters.
+  Future<void> postResults() async {
+    await _fireStore
+        .collection('rooms')
+        .doc(_roomId)
+        .update({'postResults': true});
   }
 
   //Close room by Creator
