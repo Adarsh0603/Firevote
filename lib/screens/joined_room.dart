@@ -41,7 +41,7 @@ class JoinedRoom extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ...joinedRoom.roomDetails.voteFields.entries.map((field) {
-              bool wasSelected = joinedRoom.checkIfVoted(field.value);
+              bool wasSelected = joinedRoom.checkVotedField(field.value);
               return VoteTile(
                   field.value, field.key, wasSelected, hasAlreadyVoted);
             }).toList(),

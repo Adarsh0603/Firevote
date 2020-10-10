@@ -13,9 +13,8 @@ class Auth with ChangeNotifier {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    final authResult =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    print(authResult);
+
+    await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   Future<void> signOut() async {
@@ -23,8 +22,4 @@ class Auth with ChangeNotifier {
     await FirebaseAuth.instance.signOut();
     notifyListeners();
   }
-
-//  void initializeUser(User user) {
-//    _user = user;
-//  }
 }

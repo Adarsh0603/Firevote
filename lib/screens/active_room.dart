@@ -110,7 +110,6 @@ class _ActiveRoomState extends State<ActiveRoom> {
 //            builder: (ctx, snapshot) => Column(
 //                crossAxisAlignment: CrossAxisAlignment.start,
 //                children: voteRoom.roomDetails.voteFields.entries.map((field) {
-//                  print('streaming');
 //                  return Text(
 //                      '${field.key}: ${field.value}-${snapshot.data.data()['votes'][field.key]}');
 //                }).toList()),

@@ -44,7 +44,7 @@ class _CreatorVoteTileState extends State<CreatorVoteTile> {
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
-          elevation: 1,
+          elevation: isExpanded ? 3 : 1,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
             child: Column(

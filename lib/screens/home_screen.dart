@@ -1,6 +1,7 @@
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/screens/active_room.dart';
 import 'package:firevote/screens/joined_room.dart';
+import 'package:firevote/utils.dart';
 import 'package:firevote/widgets/app_drawer.dart';
 import 'package:firevote/widgets/create_join_room.dart';
 import 'package:firevote/widgets/custom_app_bar.dart';
@@ -20,12 +21,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+
     if (isInit) {
-      _getActiveRoom = Provider.of<VoteRoom>(context, listen: false)
-          .getActiveRoom()
-          .then((_) {
-        isInit = false;
-      });
+      isInit = false;
+      _getActiveRoom =
+          Provider.of<VoteRoom>(context, listen: false).getActiveRoom();
     }
   }
 

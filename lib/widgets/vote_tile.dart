@@ -34,15 +34,15 @@ class _VoteTileState extends State<VoteTile> {
                   ],
                 ),
               ));
-      bool result = await voteRoom.vote(widget.field, widget.title);
-      Navigator.of(context, rootNavigator: true).pop();
-      if (result)
-        Utils.showSnack(context: context, content: 'Voted successfully.');
-      if (!voteRoom.freshVote) voteRoom.setFreshVote();
 
+      await voteRoom.vote(widget.field, widget.title);
+      Navigator.of(context, rootNavigator: true).pop();
+      //TODO:Solve the bug here for all field votes.
+      if (!voteRoom.freshVote) voteRoom.setFreshVote();
       setState(() {
         hasVoted = true;
       });
+      Utils.showSnack(context: context, content: 'Voted successfully.');
     } catch (e) {
       Navigator.of(context, rootNavigator: true).pop();
       Utils.showSnack(context: context, content: e);
