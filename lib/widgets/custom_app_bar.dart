@@ -6,14 +6,9 @@ class CustomAppBar {
     return AppBar(
       iconTheme: IconThemeData(color: Colors.black),
       centerTitle: true,
-      leading: Builder(
-        builder: (context) => IconButton(
-          icon: Icon(Icons.sort),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        ),
-      ),
+      elevation: 0,
       backgroundColor: kPrimaryColor,
-      title: Text('Firevote', style: kAppBarTextStyle),
+      title: Text(title, style: kAppBarTextStyle),
     );
   }
 }

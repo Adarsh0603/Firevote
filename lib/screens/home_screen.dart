@@ -2,7 +2,7 @@ import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/screens/active_room.dart';
 import 'package:firevote/screens/joined_room.dart';
 import 'package:firevote/widgets/app_drawer.dart';
-import 'package:firevote/widgets/create_join_room.dart';
+import 'package:firevote/widgets/create_join.dart';
 import 'package:firevote/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,9 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       drawer: AppDrawer(),
-      appBar: CustomAppBar.getAppBar(context, 'Firevote'),
+      appBar: CustomAppBar.getAppBar(context, 'Firevotes'),
       body: FutureBuilder(
         future: _getActiveRoom,
         builder: (ctx, snapshot) =>
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (ctx, room, _) {
                       return room.roomDetails != null
                           ? room.isCreator ? ActiveRoom() : JoinedRoom()
-                          : CreateJoinRoom();
+                          : CreateJoin();
                     },
                   ),
       ),

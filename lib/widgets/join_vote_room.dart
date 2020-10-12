@@ -1,6 +1,7 @@
 import 'package:firevote/constants.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/utils.dart';
+import 'package:firevote/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +11,7 @@ class JoinVoteRoom extends StatefulWidget {
 }
 
 class _JoinVoteRoomState extends State<JoinVoteRoom> {
-  String roomId;
+  String roomId = '';
 
   void joinVoteRoom() async {
     try {
@@ -23,44 +24,45 @@ class _JoinVoteRoomState extends State<JoinVoteRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () => Navigator.pop(context)),
-          ),
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Material(
-                      elevation: 2,
-                      child: TextField(
-                        decoration: kJoinRoomInputDecoration,
-                        onChanged: (value) {
-                          roomId = value;
-                        },
-                      ),
-                    ),
-                  ),
-                  FlatButton(
-                    child: Text('Join'),
-                    onPressed: () {
-                      joinVoteRoom();
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text('Join Vote Room'),
+        elevation: 0,
+        actions: [
+          FlatButton(
+            textColor: Colors.blue,
+            disabledTextColor: Colors.grey,
+            child: Text(
+              'Join',
+            ),
+            onPressed: roomId.length == 0 ? null : joinVoteRoom,
+          )
+        ],
+      ),
+      body: Container(
+        width: double.infinity,
+        child: Padding(
+          padding: EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Material(
+                  elevation: 2,
+                  child: TextField(
+                    decoration: kJoinRoomInputDecoration,
+                    onChanged: (value) {
+                      setState(() {
+                        roomId = value;
+                      });
                     },
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

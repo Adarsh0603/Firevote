@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const kPrimaryColor = Colors.white;
-const kAppBarTextStyle = TextStyle(color: Colors.black);
+const kAppBarTextStyle = TextStyle(color: Colors.grey);
 const kAccentColor = Color(0xffc0a062);
 
 //AuthScreen

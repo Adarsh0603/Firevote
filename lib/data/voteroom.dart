@@ -72,7 +72,6 @@ class VoteRoom with ChangeNotifier {
         voteFields: voteFields);
     _roomDetails = newRoom;
     _isCreator = true;
-    print('createVoteRoom()');
 
     notifyListeners();
   }
@@ -80,7 +79,6 @@ class VoteRoom with ChangeNotifier {
   //Gets Pre-existing active room details from Firebase
   Future<bool> getRoomIdAndDoc() async {
     try {
-      print('getRoomIdAndDoc()');
       final response = await _fireStore
           .collection('rooms')
           .where('creatorId', isEqualTo: _user.uid)
@@ -115,7 +113,6 @@ class VoteRoom with ChangeNotifier {
       voteFields: roomDetails.data()['voteFields'],
     );
     _roomDetails = activeRoomFromDb;
-    print('getActiveRoom()');
 
     notifyListeners();
   }
@@ -123,8 +120,6 @@ class VoteRoom with ChangeNotifier {
   //Join VoteRoom with RoomId
   Future<void> joinRoom(String roomId) async {
     try {
-      print('joinRoom()');
-
       final response = await _fireStore.collection('rooms').doc(roomId).get();
       final roomData = response.data();
       Room joinedRoom = Room(
@@ -141,7 +136,6 @@ class VoteRoom with ChangeNotifier {
       _currentDoc = response;
       _isCreator = false;
       notifyListeners();
-      print('Joined Room Successfully');
     } catch (e) {
       throw 'Cannot join room';
     }
@@ -161,7 +155,6 @@ class VoteRoom with ChangeNotifier {
           }
         ])
       });
-      print('vote()');
     } catch (e) {
       throw 'Vote Failed';
     }
@@ -181,8 +174,6 @@ class VoteRoom with ChangeNotifier {
 
   //Checks selected voteField
   bool checkVotedField(String fieldValue) {
-    print('checkVoteField()');
-
     var votersList = _currentDoc.data()['voted'] as List;
     var selectedFieldIfAny = votersList.firstWhere(
         (element) =>
@@ -204,23 +195,19 @@ class VoteRoom with ChangeNotifier {
 
   //Close room by Creator
   Future<void> closeRoom() async {
-    print('closeRoom()');
-    await _fireStore
-        .collection('rooms')
-        .doc(_roomId)
-        .update({'isActive': false});
+    Map<String, dynamic> dataToUpdate = {'isActive': false};
+    if (_currentDoc.data()['postResults'] as bool == false)
+      dataToUpdate = {'isActive': false, 'postResults': true};
+    await _fireStore.collection('rooms').doc(_roomId).update(dataToUpdate);
     await resetState();
   }
 
   //Leave Room by voter
   void leaveRoom() async {
-    print('leaveRoom()');
-
     await resetState();
   }
 
   void signingOut() async {
-    print('signingOut()');
     await resetState();
   }
 

@@ -5,6 +5,7 @@ import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/screens/splash_screen.dart';
 import 'package:firevote/screens/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -17,6 +18,8 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.white));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<Auth>(create: (BuildContext context) => Auth()),
