@@ -18,3 +18,5 @@ const kHeadingTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
 const kRoomNameTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
 const kRoomCreatorTextStyle = TextStyle(fontSize: 14, color: Colors.grey);
 const kRoomIdTextStyle = TextStyle(fontSize: 12, color: Colors.grey);
+const kResultsTextStyle = TextStyle(fontWeight: FontWeight.bold);
+const kResultsWaitingTextStyle = TextStyle(color: Colors.grey);

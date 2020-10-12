@@ -58,6 +58,7 @@ class VoteRoom with ChangeNotifier {
       'creatorId': _user.uid,
       'voteFields': voteFields,
       'postResults': false,
+      'resultsDeclared': false,
       'isActive': true,
       'votes': votes,
       'voted': [],
@@ -199,7 +200,7 @@ class VoteRoom with ChangeNotifier {
     await _fireStore
         .collection('rooms')
         .doc(_roomId)
-        .update({'postResults': true});
+        .update({'postResults': true, 'resultsDeclared': true});
   }
 
   //Close room by Creator

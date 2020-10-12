@@ -16,8 +16,8 @@ class VoteTile extends StatefulWidget {
 
 class _VoteTileState extends State<VoteTile> {
   bool hasVoted = false;
-  void onRevote(BuildContext context) {
-    Utils.showSnack(context: context, content: 'You have already voted');
+  void onRevote(BuildContext context, String message) {
+    Utils.showSnack(context: context, content: message);
   }
 
   void onVote(BuildContext context) async {
@@ -62,9 +62,13 @@ class _VoteTileState extends State<VoteTile> {
             leading: widget.wasSelected || hasVoted
                 ? Icon(Icons.check_circle, color: Colors.green)
                 : null,
-            onTap: () => widget.hasAlreadyVoted || voteRoom.freshVote
-                ? onRevote(context)
-                : onVote(context),
+            onTap: () =>
+                voteRoom.currentDoc.data()['resultsDeclared'] == true &&
+                        widget.hasAlreadyVoted == false
+                    ? onRevote(context, 'The results are posted..cant vote.')
+                    : widget.hasAlreadyVoted || voteRoom.freshVote
+                        ? onRevote(context, 'You have already voted.')
+                        : onVote(context),
             title: Text(widget.title),
           ),
         ),

@@ -46,21 +46,30 @@ class JoinedRoom extends StatelessWidget {
                   field.value, field.key, wasSelected, hasAlreadyVoted);
             }).toList(),
             SizedBox(height: 20),
+            Text('Results', style: kResultsTextStyle),
+            if (joinedRoom.currentDoc.data()['postResults'] == false)
+              Text('Not posted yet.', style: kResultsWaitingTextStyle),
             if (joinedRoom.currentDoc.data()['postResults'] == true) ...[
-              Text('Results'),
-              IconButton(
-                  onPressed: () => joinedRoom.voteResults(),
-                  icon: Icon(
-                    Icons.file_download,
-                    color: Colors.red,
-                  )),
-              DataTable(
-                columns: [
-                  DataColumn(label: Text('Field')),
-                  DataColumn(label: Text('Votes')),
-                ],
-                rows: joinedRoom.voteResults(),
-              )
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Material(
+                  elevation: 2,
+                  child: Container(
+                    width: double.infinity,
+                    child: DataTable(
+                      dividerThickness: 0.0,
+                      sortAscending: false,
+                      columns: [
+                        DataColumn(numeric: false, label: Text('Field')),
+                        DataColumn(label: Text('Votes')),
+                      ],
+                      rows: joinedRoom.voteResults(),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
             ]
           ],
         ),
