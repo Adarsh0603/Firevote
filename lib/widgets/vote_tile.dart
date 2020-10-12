@@ -62,13 +62,12 @@ class _VoteTileState extends State<VoteTile> {
             leading: widget.wasSelected || hasVoted
                 ? Icon(Icons.check_circle, color: Colors.green)
                 : null,
-            onTap: () =>
-                voteRoom.currentDoc.data()['resultsDeclared'] == true &&
-                        widget.hasAlreadyVoted == false
-                    ? onRevote(context, 'The results are posted..cant vote.')
-                    : widget.hasAlreadyVoted || voteRoom.freshVote
-                        ? onRevote(context, 'You have already voted.')
-                        : onVote(context),
+            onTap: () => voteRoom.currentDoc.data()['postResults'] == true &&
+                    widget.hasAlreadyVoted == false
+                ? onRevote(context, 'The results are posted..cant vote.')
+                : widget.hasAlreadyVoted || voteRoom.freshVote
+                    ? onRevote(context, 'You have already voted.')
+                    : onVote(context),
             title: Text(widget.title),
           ),
         ),
