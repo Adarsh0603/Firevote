@@ -223,6 +223,7 @@ class VoteRoom with ChangeNotifier {
     _isCreator = false;
     _currentDoc = null;
     _freshVote = false;
+    _resultsPosted = false;
     notifyListeners();
   }
 }

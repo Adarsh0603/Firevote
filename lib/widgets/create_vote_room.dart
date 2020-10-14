@@ -48,6 +48,15 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
       appBar: AppBar(
         elevation: 0,
         title: Text('Create Vote Room'),
+        actions: [
+          FlatButton(
+            child: Text(
+              'Create',
+              style: TextStyle(color: Colors.green),
+            ),
+            onPressed: onFormSave,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -58,39 +67,68 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFormField(
-                  validator: (value) {
-                    if (value.isEmpty)
-                      return 'Please enter room name.';
-                    else
-                      return null;
-                  },
-                  decoration: kRoomFormInputDecoration,
-                  onSaved: (value) {
-                    roomName = value;
-                  },
+                Container(
+                  color: Colors.grey[100],
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    validator: (value) {
+                      if (value.isEmpty)
+                        return 'Please enter room name.';
+                      else
+                        return null;
+                    },
+                    decoration: kRoomFormInputDecoration,
+                    onSaved: (value) {
+                      roomName = value;
+                    },
+                  ),
                 ),
-                SizedBox(height: 20),
-                Text('Enter Vote Fields', style: kHeadingTextStyle),
-                SizedBox(height: 10),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        '  Enter Votefields',
+                        style: kHeadingTextStyle,
+                      ),
+                      Spacer(),
+                      CustomIconButton(
+                        onPressed: inputList.length <= 2 ? null : removeField,
+                        iconData: Icons.remove,
+                      ),
+                      CustomIconButton(
+                        onPressed: inputList.length >= 10 ? null : addField,
+                        iconData: Icons.add,
+                      ),
+                      SizedBox(width: 5),
+                    ],
+                  ),
+                ),
                 Material(
-                  elevation: 3,
+                  elevation: 0,
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.6,
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    // color: Colors.grey[200],
+                    padding: EdgeInsets.only(top: 2),
+                    // color: Color(0xffF7A890),
                     // padding: EdgeInsets.symmetric(horizontal: 4),
                     child: ListView(
                       children: List.generate(inputList.length, (index) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 0.0),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 2.0, horizontal: 4),
                           child: Material(
-                            elevation: 2,
-                            color: Colors.white,
+                            elevation: 4,
+                            shadowColor: Colors.white,
+                            color: Colors.blue[300],
                             child: TextFormField(
+                              style: TextStyle(color: Colors.white),
                               validator: (value) => value.isEmpty
                                   ? 'Vote field cannot be empty!'
                                   : null,
                               decoration: InputDecoration(
                                   hintText: inputList[index].fieldName,
+                                  hintStyle: TextStyle(color: Colors.white),
                                   border: InputBorder.none,
                                   contentPadding: EdgeInsets.only(left: 8)),
                               onSaved: (value) {
@@ -103,33 +141,6 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
-                Container(
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      CustomIconButton(
-                        onPressed: inputList.length <= 2 ? null : removeField,
-                        iconData: Icons.remove,
-                      ),
-                      CustomIconButton(
-                        onPressed: inputList.length >= 10 ? null : addField,
-                        iconData: Icons.add,
-                      ),
-                      Spacer(),
-                      FlatButton(
-                        color: kAccentColor,
-                        child: Text(
-                          'Create Room',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: onFormSave,
-                      ),
-                      SizedBox(width: 5),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
               ],
             ),
           ),

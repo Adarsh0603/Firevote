@@ -49,7 +49,8 @@ class _JoinVoteRoomState extends State<JoinVoteRoom> {
             children: [
               Expanded(
                 child: Material(
-                  elevation: 2,
+                  elevation: 0,
+                  color: Colors.grey[200],
                   child: TextField(
                     decoration: kJoinRoomInputDecoration,
                     onChanged: (value) {

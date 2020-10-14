@@ -47,9 +47,10 @@ class _CreatorVoteTileState extends State<CreatorVoteTile> {
     return GestureDetector(
       onTap: getVotersList,
       child: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding: const EdgeInsets.all(4.0),
         child: Material(
-          elevation: isExpanded ? 3 : 1,
+          elevation: isExpanded ? 5 : 2,
+          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
             child: Column(
@@ -60,12 +61,16 @@ class _CreatorVoteTileState extends State<CreatorVoteTile> {
                   children: [
                     Text(
                       widget.title,
-                      style: TextStyle(fontWeight: FontWeight.w500),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                     ),
                     Spacer(),
                     Text(
                       '${widget.votes} ',
-                      style: TextStyle(fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                          color: Colors.green),
                     ),
                     Text(
                       'Votes',
