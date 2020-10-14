@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 const kPrimaryColor = Colors.white;
 const kAppBarTextStyle = TextStyle(color: Colors.grey);
 const kAccentColor = Color(0xffc0a062);
-
+const kWhiteText = TextStyle(color: Colors.white);
 //AuthScreen
 
 const kAuthFormInputDecoration = InputDecoration(hintText: 'Name');

@@ -43,77 +43,96 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-              validator: (value) {
-                if (value.isEmpty)
-                  return 'Please enter room name.';
-                else
-                  return null;
-              },
-              decoration: kRoomFormInputDecoration,
-              onSaved: (value) {
-                roomName = value;
-              },
-            ),
-            SizedBox(height: 20),
-            Text('Enter Vote Fields', style: kHeadingTextStyle),
-            SizedBox(height: 10),
-            Expanded(
-              child: ListView(
-                children: List.generate(inputList.length, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Material(
-                      elevation: 2,
-                      child: TextFormField(
-                        validator: (value) => value.isEmpty
-                            ? 'Vote field cannot be empty!'
-                            : null,
-                        decoration: InputDecoration(
-                            hintText: inputList[index].fieldName,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 8)),
-                        onSaved: (value) {
-                          inputList[index].fieldValue = value;
-                        },
-                      ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        title: Text('Create Vote Room'),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  validator: (value) {
+                    if (value.isEmpty)
+                      return 'Please enter room name.';
+                    else
+                      return null;
+                  },
+                  decoration: kRoomFormInputDecoration,
+                  onSaved: (value) {
+                    roomName = value;
+                  },
+                ),
+                SizedBox(height: 20),
+                Text('Enter Vote Fields', style: kHeadingTextStyle),
+                SizedBox(height: 10),
+                Material(
+                  elevation: 3,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    // padding: EdgeInsets.symmetric(horizontal: 4),
+                    child: ListView(
+                      children: List.generate(inputList.length, (index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 0.0),
+                          child: Material(
+                            elevation: 2,
+                            color: Colors.white,
+                            child: TextFormField(
+                              validator: (value) => value.isEmpty
+                                  ? 'Vote field cannot be empty!'
+                                  : null,
+                              decoration: InputDecoration(
+                                  hintText: inputList[index].fieldName,
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(left: 8)),
+                              onSaved: (value) {
+                                inputList[index].fieldValue = value;
+                              },
+                            ),
+                          ),
+                        );
+                      }),
                     ),
-                  );
-                }),
-              ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Container(
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      CustomIconButton(
+                        onPressed: inputList.length <= 2 ? null : removeField,
+                        iconData: Icons.remove,
+                      ),
+                      CustomIconButton(
+                        onPressed: inputList.length >= 10 ? null : addField,
+                        iconData: Icons.add,
+                      ),
+                      Spacer(),
+                      FlatButton(
+                        color: kAccentColor,
+                        child: Text(
+                          'Create Room',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: onFormSave,
+                      ),
+                      SizedBox(width: 5),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10),
+              ],
             ),
-            SizedBox(height: 10),
-            Container(
-              color: Colors.white,
-              child: Row(
-                children: [
-                  CustomIconButton(
-                    onPressed: inputList.length <= 2 ? null : removeField,
-                    iconData: Icons.remove,
-                  ),
-                  CustomIconButton(
-                    onPressed: inputList.length >= 6 ? null : addField,
-                    iconData: Icons.add,
-                  ),
-                  Spacer(),
-                  FlatButton(
-                    child: Text('Create Room'),
-                    onPressed: onFormSave,
-                  ),
-                  SizedBox(width: 5),
-                ],
-              ),
-            ),
-            SizedBox(height: 10),
-          ],
+          ),
         ),
       ),
     );

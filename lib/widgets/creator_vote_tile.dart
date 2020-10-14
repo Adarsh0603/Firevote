@@ -1,4 +1,5 @@
 import 'package:firevote/data/voteroom.dart';
+import 'package:firevote/utils.dart';
 import 'package:firevote/widgets/voter_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,10 @@ class _CreatorVoteTileState extends State<CreatorVoteTile> {
       return;
     }
     final currentDoc = Provider.of<VoteRoom>(context, listen: false).currentDoc;
+    if (currentDoc == null) {
+      Utils.showSnack(context: context, content: 'No Votes yet');
+      return;
+    }
     List voters = currentDoc.data()['voted'] as List;
     List selectedVotersList = [];
     voters.forEach((voter) {

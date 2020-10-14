@@ -4,20 +4,10 @@ import 'package:firevote/widgets/no_room_content.dart';
 import 'package:flutter/material.dart';
 
 class CreateJoin extends StatelessWidget {
-  void createRoom(BuildContext context) async {
-    showBottomSheet(
-        backgroundColor: Colors.grey[100],
-        context: context,
-        builder: (ctx) => CreateVoteRoom());
-  }
-
-  void joinRoom(BuildContext context) async {
-//    showBottomSheet(
-//        backgroundColor: Colors.grey[100],
-//        context: context,
-//        builder: (ctx) => JoinVoteRoom());
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (BuildContext context) => JoinVoteRoom()));
+  void navigate(BuildContext context, bool create) async {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) =>
+            create ? CreateVoteRoom() : JoinVoteRoom()));
   }
 
   @override
@@ -40,7 +30,7 @@ class CreateJoin extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () => createRoom(context),
+                  onPressed: () => navigate(context, true),
                 ),
               ),
               SizedBox(width: 10),
@@ -50,7 +40,7 @@ class CreateJoin extends StatelessWidget {
                     'Join Voteroom',
                     textAlign: TextAlign.center,
                   ),
-                  onPressed: () => joinRoom(context),
+                  onPressed: () => navigate(context, false),
                 ),
               ),
             ],

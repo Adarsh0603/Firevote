@@ -1,3 +1,4 @@
+import 'package:firevote/widgets/row_column_changer.dart';
 import 'package:flutter/material.dart';
 
 class NoRoomContent extends StatelessWidget {
@@ -30,10 +31,6 @@ class NoRoomContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-        builder: (BuildContext context, Orientation orientation) =>
-            MediaQuery.of(context).orientation == Orientation.landscape
-                ? Row(children: widgetList(context))
-                : Column(children: widgetList(context)));
+    return RowColumnChanger(children: widgetList(context));
   }
 }

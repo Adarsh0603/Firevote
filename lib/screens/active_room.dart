@@ -4,6 +4,7 @@ import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/utils.dart';
 import 'package:firevote/widgets/creator_vote_tile.dart';
 import 'package:firevote/widgets/danger_button.dart';
+import 'package:firevote/widgets/row_column_changer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -69,11 +70,28 @@ class _ActiveRoomState extends State<ActiveRoom> {
                         style: kRoomIdTextStyle),
                   ],
                 ),
-                FlatButton(
-                  color: Colors.white,
-                  child: Text('Share Room ID'),
-                  onPressed: () => Utils.shareId(voteRoom.roomDetails.roomId,
-                      voteRoom.roomDetails.roomName),
+                RowColumnChanger(
+                  children: [
+                    OutlineButton(
+                      child: Text(isGettingResults
+                          ? 'Hold On...'
+                          : 'Get Latest Results'),
+                      onPressed: () async {
+                        await getResults(voteRoom);
+                      },
+                    ),
+                    SizedBox(width: 10),
+                    FlatButton(
+                      color: Colors.blue,
+                      child: Text(
+                        'Share Room ID',
+                        style: kWhiteText,
+                      ),
+                      onPressed: () => Utils.shareId(
+                          voteRoom.roomDetails.roomId,
+                          voteRoom.roomDetails.roomName),
+                    ),
+                  ],
                 )
               ],
             ),
@@ -83,16 +101,6 @@ class _ActiveRoomState extends State<ActiveRoom> {
                 children: voteRoom.roomDetails.voteFields.entries.map((field) {
                   return CreatorVoteTile(field.value, votesMap[field.key] ?? 0);
                 }).toList()),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: FlatButton(
-                child: Text(
-                    isGettingResults ? 'Hold On...' : 'Get Latest Results'),
-                onPressed: () async {
-                  await getResults(voteRoom);
-                },
-              ),
-            ),
             FlatButton(
               child: Text('Post Results'),
               onPressed: () async {
