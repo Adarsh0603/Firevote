@@ -13,6 +13,7 @@ class VoteRoom with ChangeNotifier {
   bool _isCreator = false;
   bool _freshVote = false;
   Room _roomDetails;
+  bool _resultsPosted = false;
 
   void initializeUser(User user) {
     _user = user;
@@ -24,6 +25,7 @@ class VoteRoom with ChangeNotifier {
   bool get isCreator => _isCreator;
   DocumentSnapshot get currentDoc => _currentDoc;
   bool get freshVote => _freshVote;
+  bool get resultsPosted => _resultsPosted;
 
   //Checks if voter exists in room and has voted
   bool get hasAlreadyVoted {
@@ -93,6 +95,7 @@ class VoteRoom with ChangeNotifier {
         _roomId = response.docs[0].id;
         return false;
       }
+      _resultsPosted = response.docs[0].data()['postResults'];
       _currentDoc = response.docs[0];
       _roomId = response.docs[0].id;
       return true;
@@ -191,6 +194,8 @@ class VoteRoom with ChangeNotifier {
         .collection('rooms')
         .doc(_roomId)
         .update({'postResults': true});
+    _resultsPosted = true;
+    notifyListeners();
   }
 
   //Close room by Creator

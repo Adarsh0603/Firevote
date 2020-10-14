@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firevote/constants.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/utils.dart';
+import 'package:firevote/widgets/alert.dart';
 import 'package:firevote/widgets/creator_vote_tile.dart';
-import 'package:firevote/widgets/danger_button.dart';
-import 'package:firevote/widgets/row_column_changer.dart';
+import 'package:firevote/widgets/custom_loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,33 +66,21 @@ class _ActiveRoomState extends State<ActiveRoom> {
                   children: [
                     Text(voteRoom.roomDetails.roomName,
                         style: kRoomNameTextStyle),
-                    Text('ID-${voteRoom.roomDetails.roomId}',
-                        style: kRoomIdTextStyle),
+                    if (voteRoom.resultsPosted == false)
+                      Text('ID-${voteRoom.roomDetails.roomId}',
+                          style: kRoomIdTextStyle),
                   ],
                 ),
-                RowColumnChanger(
-                  children: [
-                    OutlineButton(
-                      child: Text(isGettingResults
-                          ? 'Hold On...'
-                          : 'Get Latest Results'),
-                      onPressed: () async {
-                        await getResults(voteRoom);
-                      },
+                if (voteRoom.resultsPosted == false)
+                  FlatButton(
+                    color: Colors.blue,
+                    child: Text(
+                      'Invite',
+                      style: kWhiteText,
                     ),
-                    SizedBox(width: 10),
-                    FlatButton(
-                      color: Colors.blue,
-                      child: Text(
-                        'Share Room ID',
-                        style: kWhiteText,
-                      ),
-                      onPressed: () => Utils.shareId(
-                          voteRoom.roomDetails.roomId,
-                          voteRoom.roomDetails.roomName),
-                    ),
-                  ],
-                )
+                    onPressed: () => Utils.shareId(voteRoom.roomDetails.roomId,
+                        voteRoom.roomDetails.roomName),
+                  ),
               ],
             ),
             SizedBox(height: 10),
@@ -101,14 +89,69 @@ class _ActiveRoomState extends State<ActiveRoom> {
                 children: voteRoom.roomDetails.voteFields.entries.map((field) {
                   return CreatorVoteTile(field.value, votesMap[field.key] ?? 0);
                 }).toList()),
-            FlatButton(
-              child: Text('Post Results'),
-              onPressed: () async {
-                await voteRoom.postResults();
-              },
+            SizedBox(height: 20),
+            Row(
+              children: [
+                if (voteRoom.resultsPosted == false)
+                  OutlineButton(
+                    child: Text('Post Results'),
+                    onPressed: () async {
+                      await showDialog(
+                          context: (context),
+                          builder: (ctx) => Alert(
+                                title: 'Are You Sure?',
+                                onAgree: () async {
+                                  await voteRoom.postResults();
+                                  Navigator.pop(context);
+                                },
+                                onCancel: () => Navigator.pop(context),
+                                content:
+                                    'Posting the results will make votes visible to all voters.\nVoting will be closed and no one can vote after posting results.',
+                              ));
+                      Utils.showSnack(
+                          context: context,
+                          content: 'Results posted successfully');
+                    },
+                  ),
+                SizedBox(width: 10),
+                OutlineButton(
+                  onPressed: () {
+                    showDialog(
+                        context: (context),
+                        builder: (ctx) => Alert(
+                              title: 'Are You Sure?',
+                              onAgree: () {
+                                Navigator.of(context).pop();
+                                voteRoom.closeRoom();
+                              },
+                              onCancel: () => Navigator.pop(context),
+                              content:
+                                  'You wont be able to access this room again after closing. The results will be shown to all voters and no new vote can be submitted.',
+                            ));
+                  },
+                  child: Text('Close Room'),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+                Spacer(),
+                if (voteRoom.resultsPosted == false)
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      child: isGettingResults
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CustomLoader(),
+                            )
+                          : IconButton(
+                              icon: Icon(Icons.refresh_sharp),
+                              onPressed: () async {
+                                await getResults(voteRoom);
+                              },
+                            ),
+                    ),
+                  ),
+              ],
             ),
-            SizedBox(height: 50),
-            DangerButton(text: 'Close Room', onPressed: voteRoom.closeRoom),
           ],
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:firevote/constants.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/modals/votefield.dart';
-import 'package:firevote/widgets/add_field_button.dart';
+import 'package:firevote/widgets/custom_icon_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
