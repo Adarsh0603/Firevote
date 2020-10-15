@@ -10,67 +10,113 @@ class JoinedRoom extends StatelessWidget {
     final joinedRoom = Provider.of<VoteRoom>(context, listen: false);
     bool hasAlreadyVoted = joinedRoom.hasAlreadyVoted;
     return Container(
-      padding: EdgeInsets.all(16),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(joinedRoom.roomDetails.roomName,
-                        style: kRoomNameTextStyle),
-                    Text(
-                      'ID - ${joinedRoom.roomDetails.roomId ?? 'default'}',
-                      style: kRoomIdTextStyle,
-                    ),
-                    Text('Created By-${joinedRoom.roomDetails.creatorName}',
-                        style: kRoomCreatorTextStyle),
-                  ],
-                ),
-                IconButton(
-                    onPressed: () => joinedRoom.leaveRoom(),
-                    icon: Icon(
-                      Icons.exit_to_app,
-                      color: Colors.red,
-                    )),
-              ],
+            Container(
+              color: Colors.blue[600],
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(joinedRoom.roomDetails.roomName,
+                          style: kRoomNameTextStyle),
+                      // Text(
+                      //   'ID - ${joinedRoom.roomDetails.roomId ?? 'default'}',
+                      //   style: kRoomIdTextStyle,
+                      // ),
+                      // Text('Created By-${joinedRoom.roomDetails.creatorName}',
+                      //     style: kRoomCreatorTextStyle),
+                    ],
+                  ),
+                  IconButton(
+                      onPressed: () => joinedRoom.leaveRoom(),
+                      icon: Icon(
+                        Icons.exit_to_app,
+                        color: Colors.white,
+                      )),
+                ],
+              ),
             ),
             SizedBox(height: 20),
-            ...joinedRoom.roomDetails.voteFields.entries.map((field) {
-              bool wasSelected = joinedRoom.checkVotedField(field.value);
-              return VoteTile(
-                  field.value, field.key, wasSelected, hasAlreadyVoted);
-            }).toList(),
-            SizedBox(height: 20),
-            Text('Results', style: kResultsTextStyle),
             if (joinedRoom.currentDoc.data()['postResults'] == false)
-              Text('Not posted yet.', style: kResultsWaitingTextStyle),
-            if (joinedRoom.currentDoc.data()['postResults'] == true) ...[
-              SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                 child: Material(
-                  elevation: 2,
+                  elevation: 0,
+                  shadowColor: Colors.blue[500],
                   child: Container(
-                    width: double.infinity,
-                    child: DataTable(
-                      dividerThickness: 0.0,
-                      sortAscending: false,
-                      columns: [
-                        DataColumn(numeric: false, label: Text('Field')),
-                        DataColumn(label: Text('Votes')),
-                      ],
-                      rows: joinedRoom.voteResults(),
-                    ),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.blue[100])),
+                      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+                      child: Column(
+                          children: joinedRoom.roomDetails.voteFields.entries
+                              .map((field) {
+                        bool wasSelected =
+                            joinedRoom.checkVotedField(field.value);
+                        return VoteTile(field.value, field.key, wasSelected,
+                            hasAlreadyVoted);
+                      }).toList())),
+                ),
+              ),
+            SizedBox(height: 5),
+            if (joinedRoom.currentDoc.data()['postResults'] == true)
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                child: Material(
+                  elevation: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 16),
+                        child: Text('Results :', style: kResultsTextStyle),
+                      ),
+                      Divider(height: 0),
+                      if (joinedRoom.currentDoc.data()['postResults'] == false)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text('Not posted yet.',
+                              style: kResultsWaitingTextStyle),
+                        ),
+                      if (joinedRoom.currentDoc.data()['postResults'] ==
+                          true) ...[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Material(
+                            elevation: 0,
+                            child: Container(
+                              color: Colors.grey[200],
+                              width: double.infinity,
+                              child: DataTable(
+                                dividerThickness: 0.0,
+                                sortAscending: false,
+                                columns: [
+                                  DataColumn(label: Text('No.')),
+                                  DataColumn(
+                                      numeric: false, label: Text('Field')),
+                                  DataColumn(label: Text('Votes')),
+                                ],
+                                rows: joinedRoom.voteResults(context),
+                              ),
+                            ),
+                          ),
+                        ),
+                        // SizedBox(height: 20),
+                      ]
+                    ],
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-            ]
+            if (joinedRoom.currentDoc.data()['postResults'] == false)
+              Text('REsults not posted Yet'),
           ],
         ),
       ),

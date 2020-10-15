@@ -163,14 +163,30 @@ class VoteRoom with ChangeNotifier {
     }
   }
 
-  List<DataRow> voteResults() {
+  List<DataRow> voteResults(BuildContext context) {
     var voteMap = _currentDoc.data()['votes'] as Map;
     List<DataRow> voteRows = [];
+    int index = 0;
     voteMap.forEach((key, value) {
-      voteRows.add(DataRow(cells: [
-        DataCell(Text(_currentDoc.data()['voteFields'][key])),
-        DataCell(Text(value.toString()))
-      ]));
+      index++;
+      voteRows.add(DataRow(
+          color: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.selected))
+              return Theme.of(context).colorScheme.primary;
+            return Colors.grey[200]; // Use the default value.
+          }),
+          cells: [
+            DataCell(Text(index.toString())),
+            DataCell(Text(_currentDoc.data()['voteFields'][key])),
+            DataCell(Text(
+              value.toString(),
+              style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ))
+          ]));
     });
     return voteRows;
   }

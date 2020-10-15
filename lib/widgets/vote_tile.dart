@@ -1,3 +1,4 @@
+import 'package:firevote/constants.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/utils.dart';
 import 'package:flutter/material.dart';
@@ -53,9 +54,9 @@ class _VoteTileState extends State<VoteTile> {
   Widget build(BuildContext context) {
     final voteRoom = Provider.of<VoteRoom>(context, listen: false);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Material(
-        elevation: hasVoted ? 5 : 3,
+        elevation: hasVoted ? 5 : 0,
         child: Container(
           color: Colors.white,
           child: ListTile(
@@ -68,7 +69,7 @@ class _VoteTileState extends State<VoteTile> {
                 : widget.hasAlreadyVoted || voteRoom.freshVote
                     ? onRevote(context, 'You have already voted.')
                     : onVote(context),
-            title: Text(widget.title),
+            title: Text(widget.title, style: kVoterNameTextStyle),
           ),
         ),
       ),

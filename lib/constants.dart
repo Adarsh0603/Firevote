@@ -22,5 +22,7 @@ const kRoomNameTextStyle =
     TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white);
 const kRoomCreatorTextStyle = TextStyle(fontSize: 14, color: Colors.grey);
 const kRoomIdTextStyle = TextStyle(fontSize: 12, color: Colors.grey);
-const kResultsTextStyle = TextStyle(fontWeight: FontWeight.bold);
+const kResultsTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
 const kResultsWaitingTextStyle = TextStyle(color: Colors.grey);
+const kVoterNameTextStyle =
+    TextStyle(fontWeight: FontWeight.w500, fontSize: 16);

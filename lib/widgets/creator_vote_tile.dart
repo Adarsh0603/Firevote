@@ -1,3 +1,4 @@
+import 'package:firevote/constants.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:firevote/utils.dart';
 import 'package:firevote/widgets/voter_detail.dart';
@@ -61,8 +62,7 @@ class _CreatorVoteTileState extends State<CreatorVoteTile> {
                   children: [
                     Text(
                       widget.title,
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                      style: kVoterNameTextStyle,
                     ),
                     Spacer(),
                     Text(
