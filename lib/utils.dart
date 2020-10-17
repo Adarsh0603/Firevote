@@ -8,7 +8,7 @@ class Utils {
     Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(content),
-      duration: Duration(seconds: 2),
+      duration: Duration(seconds: 1),
     ));
   }
 

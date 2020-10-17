@@ -169,24 +169,17 @@ class VoteRoom with ChangeNotifier {
     int index = 0;
     voteMap.forEach((key, value) {
       index++;
-      voteRows.add(DataRow(
-          color: MaterialStateProperty.resolveWith<Color>(
-              (Set<MaterialState> states) {
-            if (states.contains(MaterialState.selected))
-              return Theme.of(context).colorScheme.primary;
-            return Colors.grey[200]; // Use the default value.
-          }),
-          cells: [
-            DataCell(Text(index.toString())),
-            DataCell(Text(_currentDoc.data()['voteFields'][key])),
-            DataCell(Text(
-              value.toString(),
-              style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
-            ))
-          ]));
+      voteRows.add(DataRow(cells: [
+        DataCell(Text(
+          _currentDoc.data()['voteFields'][key],
+          style: TextStyle(fontWeight: FontWeight.w500),
+        )),
+        DataCell(Text(
+          value.toString(),
+          style: TextStyle(
+              color: Colors.green, fontSize: 16, fontWeight: FontWeight.bold),
+        ))
+      ]));
     });
     return voteRows;
   }
@@ -224,7 +217,10 @@ class VoteRoom with ChangeNotifier {
   }
 
   //Leave Room by voter
-  void leaveRoom() async {
+  Future<void> leaveRoom() async {
+    await _fireStore.collection('rooms').doc(_roomId).update({
+      'members': FieldValue.arrayRemove([_user.uid])
+    });
     await resetState();
   }
 

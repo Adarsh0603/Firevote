@@ -56,7 +56,7 @@ class _VoteTileState extends State<VoteTile> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Material(
-        elevation: hasVoted ? 5 : 0,
+        elevation: hasVoted || widget.wasSelected ? 5 : 0,
         child: Container(
           color: Colors.white,
           child: ListTile(

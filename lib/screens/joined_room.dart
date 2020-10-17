@@ -16,7 +16,7 @@ class JoinedRoom extends StatelessWidget {
           children: [
             Container(
               color: Colors.blue[600],
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -25,20 +25,17 @@ class JoinedRoom extends StatelessWidget {
                     children: [
                       Text(joinedRoom.roomDetails.roomName,
                           style: kRoomNameTextStyle),
-                      // Text(
-                      //   'ID - ${joinedRoom.roomDetails.roomId ?? 'default'}',
-                      //   style: kRoomIdTextStyle,
-                      // ),
-                      // Text('Created By-${joinedRoom.roomDetails.creatorName}',
-                      //     style: kRoomCreatorTextStyle),
+                      Text(
+                        'ID - ${joinedRoom.roomDetails.roomId ?? 'default'}',
+                        style: kRoomIdTextStyle,
+                      ),
+                      Text('Created By-${joinedRoom.roomDetails.creatorName}',
+                          style: kRoomCreatorTextStyle),
                     ],
                   ),
-                  IconButton(
-                      onPressed: () => joinedRoom.leaveRoom(),
-                      icon: Icon(
-                        Icons.exit_to_app,
-                        color: Colors.white,
-                      )),
+                  FlatButton(
+                      onPressed: () async => await joinedRoom.leaveRoom(),
+                      child: Text('Leave Room', style: kWhiteText)),
                 ],
               ),
             ),
@@ -99,9 +96,7 @@ class JoinedRoom extends StatelessWidget {
                                 dividerThickness: 0.0,
                                 sortAscending: false,
                                 columns: [
-                                  DataColumn(label: Text('No.')),
-                                  DataColumn(
-                                      numeric: false, label: Text('Field')),
+                                  DataColumn(label: Text('Field')),
                                   DataColumn(label: Text('Votes')),
                                 ],
                                 rows: joinedRoom.voteResults(context),
@@ -115,8 +110,17 @@ class JoinedRoom extends StatelessWidget {
                   ),
                 ),
               ),
-            if (joinedRoom.currentDoc.data()['postResults'] == false)
-              Text('REsults not posted Yet'),
+            if (joinedRoom.currentDoc.data()['postResults'] == false) ...[
+              SizedBox(height: 30),
+              Center(
+                  child: Text(
+                'Results are not posted yet.',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Colors.grey),
+              ))
+            ]
           ],
         ),
       ),

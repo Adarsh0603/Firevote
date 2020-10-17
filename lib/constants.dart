@@ -20,8 +20,8 @@ const kRoomFormInputDecoration = InputDecoration(
 const kHeadingTextStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500);
 const kRoomNameTextStyle =
     TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white);
-const kRoomCreatorTextStyle = TextStyle(fontSize: 14, color: Colors.grey);
-const kRoomIdTextStyle = TextStyle(fontSize: 12, color: Colors.grey);
+const kRoomCreatorTextStyle = TextStyle(fontSize: 12, color: Colors.white70);
+const kRoomIdTextStyle = TextStyle(fontSize: 10, color: Colors.white70);
 const kResultsTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
 const kResultsWaitingTextStyle = TextStyle(color: Colors.grey);
 const kVoterNameTextStyle =
