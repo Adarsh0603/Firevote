@@ -16,22 +16,52 @@ class AppDrawer extends StatelessWidget {
 
     return Drawer(
       child: SafeArea(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Container(
-              color: Colors.white,
-              child: ListTile(
-                leading: Icon(Icons.person_outline),
-                title: Text(voteRoom.user.displayName),
+        child: Container(
+          color: Colors.white,
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Container(
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8),
+                      child: Text(
+                        'Firevotes',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.green,
+                            fontSize: 28),
+                      ),
+                    ),
+                    Divider(),
+                    ListTile(
+                      // leading: Icon(Icons.person),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Logged In as:',
+                              style:
+                                  TextStyle(fontSize: 10, color: Colors.grey)),
+                          Text(voteRoom.user.displayName),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            ListTile(
-              title: Text('Sign Out'),
-              onTap: () => signOut(context),
-            ),
-          ],
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Sign Out'),
+                onTap: () => signOut(context),
+              ),
+            ],
+          ),
         ),
       ),
     );

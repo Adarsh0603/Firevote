@@ -70,7 +70,7 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
                 Container(
                   color: Colors.grey[100],
                   child: TextFormField(
-                    textAlign: TextAlign.center,
+                    cursorColor: Colors.black,
                     validator: (value) {
                       if (value.isEmpty)
                         return 'Please enter room name.';
@@ -108,10 +108,7 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
                   elevation: 0,
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.7,
-                    // color: Colors.grey[200],
                     padding: EdgeInsets.only(top: 2),
-                    // color: Color(0xffF7A890),
-                    // padding: EdgeInsets.symmetric(horizontal: 4),
                     child: ListView(
                       children: List.generate(inputList.length, (index) {
                         return Padding(
@@ -120,9 +117,12 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
                           child: Material(
                             elevation: 4,
                             shadowColor: Colors.white,
-                            color: Colors.blue[300],
+                            color: Colors.blue[200],
                             child: TextFormField(
-                              style: TextStyle(color: Colors.white),
+                              cursorColor: Colors.white,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
                               validator: (value) => value.isEmpty
                                   ? 'Vote field cannot be empty!'
                                   : null,

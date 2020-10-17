@@ -9,6 +9,7 @@ class AuthScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        elevation: 0,
         title: Text('Log in to Continue'),
       ),
       body: Column(

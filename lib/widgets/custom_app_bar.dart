@@ -6,7 +6,7 @@ class CustomAppBar {
     return AppBar(
       iconTheme: IconThemeData(color: Colors.black),
       centerTitle: true,
-      // elevation:,
+      elevation: 0,
       backgroundColor: kPrimaryColor,
       title: Text(title, style: kAppBarTextStyle),
     );

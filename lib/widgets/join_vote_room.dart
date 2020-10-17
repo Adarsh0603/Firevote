@@ -30,7 +30,7 @@ class _JoinVoteRoomState extends State<JoinVoteRoom> {
         elevation: 0,
         actions: [
           FlatButton(
-            textColor: Colors.blue,
+            textColor: Colors.green,
             disabledTextColor: Colors.grey,
             child: Text(
               'Join',
@@ -51,6 +51,7 @@ class _JoinVoteRoomState extends State<JoinVoteRoom> {
                   elevation: 0,
                   color: Colors.grey[200],
                   child: TextField(
+                    cursorColor: Colors.black,
                     decoration: kJoinRoomInputDecoration,
                     onChanged: (value) {
                       setState(() {
