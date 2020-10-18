@@ -1,3 +1,4 @@
+import 'package:firevote/constants.dart';
 import 'package:firevote/data/auth.dart';
 import 'package:firevote/data/voteroom.dart';
 import 'package:flutter/material.dart';
@@ -23,38 +24,22 @@ class AppDrawer extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: <Widget>[
               Container(
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8),
-                      child: Text(
-                        'Firevotes',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.green,
-                            fontSize: 28),
+                color: Colors.black,
+                child: ListTile(
+                  // leading: Icon(Icons.person),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Logged In as:',
+                          style: TextStyle(fontSize: 10, color: Colors.grey)),
+                      Text(
+                        voteRoom.user.displayName,
+                        style: kWhiteText,
                       ),
-                    ),
-                    Divider(),
-                    ListTile(
-                      // leading: Icon(Icons.person),
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Logged In as:',
-                              style:
-                                  TextStyle(fontSize: 10, color: Colors.grey)),
-                          Text(voteRoom.user.displayName),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              Divider(),
               ListTile(
                 leading: Icon(Icons.logout),
                 title: Text('Sign Out'),

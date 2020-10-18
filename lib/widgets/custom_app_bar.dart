@@ -5,9 +5,9 @@ class CustomAppBar {
   static getAppBar(BuildContext context, String title) {
     return AppBar(
       iconTheme: IconThemeData(color: Colors.black),
-      centerTitle: true,
+      centerTitle: false,
       elevation: 0,
-      backgroundColor: kPrimaryColor,
+      backgroundColor: Colors.white,
       title: Text(title, style: kAppBarTextStyle),
     );
   }

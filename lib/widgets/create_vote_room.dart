@@ -117,12 +117,12 @@ class _CreateVoteRoomState extends State<CreateVoteRoom> {
                           child: Material(
                             elevation: 4,
                             shadowColor: Colors.white,
-                            color: Colors.blue[200],
+                            color: Colors.black87,
                             child: TextFormField(
                               cursorColor: Colors.white,
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w500),
+                                  fontWeight: FontWeight.w400),
                               validator: (value) => value.isEmpty
                                   ? 'Vote field cannot be empty!'
                                   : null,

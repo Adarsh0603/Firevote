@@ -12,7 +12,7 @@ class JoinVoteRoom extends StatefulWidget {
 class _JoinVoteRoomState extends State<JoinVoteRoom> {
   String roomId = '';
 
-  void joinVoteRoom() async {
+  void joinVoteRoom(BuildContext context) async {
     try {
       await Provider.of<VoteRoom>(context, listen: false).joinRoom(roomId);
       Navigator.pop(context);
@@ -29,13 +29,19 @@ class _JoinVoteRoomState extends State<JoinVoteRoom> {
         title: Text('Join Vote Room'),
         elevation: 0,
         actions: [
-          FlatButton(
-            textColor: Colors.green,
-            disabledTextColor: Colors.grey,
-            child: Text(
-              'Join',
+          Builder(
+            builder: (ctx) => FlatButton(
+              textColor: Colors.green,
+              disabledTextColor: Colors.grey,
+              child: Text(
+                'Join',
+              ),
+              onPressed: roomId.length == 0
+                  ? null
+                  : () {
+                      joinVoteRoom(ctx);
+                    },
             ),
-            onPressed: roomId.length == 0 ? null : joinVoteRoom,
           )
         ],
       ),

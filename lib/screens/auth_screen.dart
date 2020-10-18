@@ -1,3 +1,4 @@
+import 'package:firevote/constants.dart';
 import 'package:firevote/data/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -10,14 +11,15 @@ class AuthScreen extends StatelessWidget {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         elevation: 0,
-        title: Text('Log in to Continue'),
+        backgroundColor: Colors.black,
+        title: Text('Firevotes', style: kWhiteText),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
             child: SignInButton(
-              Buttons.GoogleDark,
+              Buttons.Google,
               text: "Sign in with Google",
               onPressed: () async {
                 await Provider.of<Auth>(context, listen: false)

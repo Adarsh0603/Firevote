@@ -33,7 +33,7 @@ class _ActiveRoomState extends State<ActiveRoom> {
     setState(() {
       isGettingResults = false;
     });
-    Utils.showSnack(context: context, content: 'Updated Results.');
+    Utils.showSnack(context: context, content: 'Votes updated.');
   }
 
   @override
@@ -53,42 +53,44 @@ class _ActiveRoomState extends State<ActiveRoom> {
   Widget build(BuildContext context) {
     final voteRoom = Provider.of<VoteRoom>(context, listen: false);
     return Container(
+      color: Colors.grey[100],
       child: Stack(children: [
         SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                color: Colors.blue[600],
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(voteRoom.roomDetails.roomName,
-                            style: kRoomNameTextStyle),
-                        if (voteRoom.resultsPosted == false)
+              Material(
+                // elevation: 5,
+                child: Container(
+                  color: Colors.black,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(voteRoom.roomDetails.roomName,
+                              style: kRoomNameTextStyle),
                           Text('ID-${voteRoom.roomDetails.roomId}',
                               style: kRoomIdTextStyle),
-                      ],
-                    ),
-                    if (voteRoom.resultsPosted == false)
+                        ],
+                      ),
                       FlatButton(
                         shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
-                        color: Colors.blue[300],
+                        color: Colors.white,
                         child: Text(
-                          'Invite',
-                          style: kWhiteText,
+                          'Share Room ID',
+                          // style: kWhiteText,
                         ),
                         onPressed: () => Utils.shareId(
                             voteRoom.roomDetails.roomId,
                             voteRoom.roomDetails.roomName),
                       ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 5),
@@ -111,6 +113,7 @@ class _ActiveRoomState extends State<ActiveRoom> {
           child: voteRoom.resultsPosted
               ? Container(
                   width: double.infinity,
+                  height: 48,
                   child: FlatButton(
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     child: Text('Close Room', style: kWhiteText),
@@ -118,76 +121,74 @@ class _ActiveRoomState extends State<ActiveRoom> {
                     onPressed: voteRoom.closeRoom,
                   ),
                 )
-              : Material(
-                  elevation: 0,
-                  color: Colors.grey[100],
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: isGettingResults
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: CustomLoader(),
-                                  )
-                                : IconButton(
-                                    icon: Icon(Icons.refresh_sharp),
-                                    onPressed: () async {
-                                      await getResults(voteRoom);
-                                    },
-                                  ),
+              : Container(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: isGettingResults
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0),
+                                  child: CustomLoader(),
+                                )
+                              : IconButton(
+                                  icon: Icon(Icons.refresh_sharp,
+                                      color: Colors.black),
+                                  onPressed: () async {
+                                    await getResults(voteRoom);
+                                  },
+                                ),
+                        ),
+                        FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: Text(
+                            'Post Results',
+                            style: kWhiteText,
                           ),
-                          FlatButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Text(
-                              'Post Results',
-                              style: kWhiteText,
-                            ),
-                            color: Colors.blue[400],
-                            onPressed: () async {
-                              bool result = await showDialog(
-                                  context: (context),
-                                  builder: (ctx) => Alert(
-                                        title: 'Release Results?',
-                                        onAgree: () async {
-                                          await voteRoom.postResults();
-                                          Navigator.of(context).pop(true);
-                                        },
-                                        onCancel: () =>
-                                            Navigator.of(context).pop(false),
-                                        content:
-                                            'Posting the results will make votes visible to all voters.\nVoting will be closed and no one can vote after posting results.',
-                                      ));
-                              if (result)
-                                Utils.showSnack(
-                                    context: context,
-                                    content: 'Results posted successfully');
-                            },
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: (context),
-                                  builder: (ctx) => Alert(
-                                        title: 'Close Room?',
-                                        onAgree: () {
-                                          Navigator.of(context).pop();
-                                          voteRoom.closeRoom();
-                                        },
-                                        onCancel: () => Navigator.pop(context),
-                                        content:
-                                            'You wont be able to access this room again after closing. The results will be shown to all voters and no new vote can be submitted.',
-                                      ));
-                            },
-                            icon: Icon(Icons.exit_to_app),
-                          ),
-                        ],
-                      ),
+                          color: Colors.black,
+                          onPressed: () async {
+                            bool result = await showDialog(
+                                context: (context),
+                                builder: (ctx) => Alert(
+                                      title: 'Post Results?',
+                                      onAgree: () async {
+                                        await voteRoom.postResults();
+                                        Navigator.of(context).pop(true);
+                                      },
+                                      onCancel: () =>
+                                          Navigator.of(context).pop(false),
+                                      content:
+                                          'Posting the results will make votes visible to all voters.\nVoting will be closed and no one can vote after posting results.',
+                                    ));
+                            if (result)
+                              Utils.showSnack(
+                                  context: context,
+                                  content: 'Results posted successfully');
+                          },
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            showDialog(
+                                context: (context),
+                                builder: (ctx) => Alert(
+                                      title: 'Close Room?',
+                                      onAgree: () {
+                                        Navigator.of(context).pop();
+                                        voteRoom.closeRoom();
+                                      },
+                                      onCancel: () => Navigator.pop(context),
+                                      content:
+                                          'You wont be able to access this room again after closing. The results will be shown to all voters and no new vote can be submitted.',
+                                    ));
+                          },
+                          icon: Icon(Icons.logout, color: Colors.black),
+                        ),
+                      ],
                     ),
                   ),
                 ),

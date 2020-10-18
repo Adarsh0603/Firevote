@@ -15,7 +15,7 @@ class JoinedRoom extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              color: Colors.blue[600],
+              color: kAccentColor,
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -25,12 +25,14 @@ class JoinedRoom extends StatelessWidget {
                     children: [
                       Text(joinedRoom.roomDetails.roomName,
                           style: kRoomNameTextStyle),
+                      SizedBox(height: 5),
                       Text(
                         'ID - ${joinedRoom.roomDetails.roomId ?? 'default'}',
                         style: kRoomIdTextStyle,
                       ),
                       Text('Created By-${joinedRoom.roomDetails.creatorName}',
                           style: kRoomCreatorTextStyle),
+                      SizedBox(height: 5),
                     ],
                   ),
                   FlatButton(
@@ -40,6 +42,12 @@ class JoinedRoom extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
+            if (joinedRoom.currentDoc.data()['postResults'] == false &&
+                !joinedRoom.hasAlreadyVoted)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text('Double Tap any field to vote.'),
+              ),
             if (joinedRoom.currentDoc.data()['postResults'] == false)
               Padding(
                 padding:
@@ -74,7 +82,7 @@ class JoinedRoom extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 16),
-                        child: Text('Results :', style: kResultsTextStyle),
+                        child: Text('Results', style: kResultsTextStyle),
                       ),
                       Divider(height: 0),
                       if (joinedRoom.currentDoc.data()['postResults'] == false)

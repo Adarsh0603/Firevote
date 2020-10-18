@@ -24,7 +24,7 @@ class CreateJoin extends StatelessWidget {
             children: [
               Expanded(
                 child: FlatButton(
-                  color: Colors.blue[300],
+                  color: Colors.green[400],
                   child: Text(
                     'Create Voteroom',
                     textAlign: TextAlign.center,

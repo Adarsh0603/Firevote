@@ -56,20 +56,23 @@ class _VoteTileState extends State<VoteTile> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Material(
-        elevation: hasVoted || widget.wasSelected ? 5 : 0,
-        child: Container(
-          color: Colors.white,
-          child: ListTile(
-            leading: widget.wasSelected || hasVoted
-                ? Icon(Icons.check_circle, color: Colors.green)
-                : null,
-            onTap: () => voteRoom.currentDoc.data()['postResults'] == true &&
-                    widget.hasAlreadyVoted == false
-                ? onRevote(context, 'The results are posted..cant vote.')
-                : widget.hasAlreadyVoted || voteRoom.freshVote
-                    ? onRevote(context, 'You have already voted.')
-                    : onVote(context),
-            title: Text(widget.title, style: kVoterNameTextStyle),
+        elevation: hasVoted || widget.wasSelected ? 5 : 2,
+        child: GestureDetector(
+          onDoubleTap: () =>
+              voteRoom.currentDoc.data()['postResults'] == true &&
+                      widget.hasAlreadyVoted == false
+                  ? onRevote(context, 'The results are posted..cant vote.')
+                  : widget.hasAlreadyVoted || voteRoom.freshVote
+                      ? onRevote(context, 'You have already voted.')
+                      : onVote(context),
+          child: Container(
+            color: Colors.white,
+            child: ListTile(
+              leading: widget.wasSelected || hasVoted
+                  ? Icon(Icons.check_circle, color: Colors.green)
+                  : null,
+              title: Text(widget.title, style: kVoterNameTextStyle),
+            ),
           ),
         ),
       ),

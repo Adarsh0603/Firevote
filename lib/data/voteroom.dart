@@ -91,8 +91,10 @@ class VoteRoom with ChangeNotifier {
             .collection('rooms')
             .where('members', arrayContains: _user.uid)
             .get();
-        _currentDoc = response.docs[0];
-        _roomId = response.docs[0].id;
+        if (response.docs.length != 0) {
+          _currentDoc = response.docs[0];
+          _roomId = response.docs[0].id;
+        }
         return false;
       }
       _resultsPosted = response.docs[0].data()['postResults'];
@@ -140,7 +142,7 @@ class VoteRoom with ChangeNotifier {
       _isCreator = false;
       notifyListeners();
     } catch (e) {
-      throw 'Cannot join room';
+      throw 'Cannot join room. Please enter correct room id.';
     }
   }
 
@@ -166,9 +168,7 @@ class VoteRoom with ChangeNotifier {
   List<DataRow> voteResults(BuildContext context) {
     var voteMap = _currentDoc.data()['votes'] as Map;
     List<DataRow> voteRows = [];
-    int index = 0;
     voteMap.forEach((key, value) {
-      index++;
       voteRows.add(DataRow(cells: [
         DataCell(Text(
           _currentDoc.data()['voteFields'][key],
@@ -210,6 +210,9 @@ class VoteRoom with ChangeNotifier {
   //Close room by Creator
   Future<void> closeRoom() async {
     Map<String, dynamic> dataToUpdate = {'isActive': false};
+    if (_currentDoc == null) {
+      _currentDoc = await _fireStore.collection('rooms').doc(_roomId).get();
+    }
     if (_currentDoc.data()['postResults'] as bool == false)
       dataToUpdate = {'isActive': false, 'postResults': true};
     await _fireStore.collection('rooms').doc(_roomId).update(dataToUpdate);

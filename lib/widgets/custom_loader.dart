@@ -4,7 +4,7 @@ class CustomLoader extends StatelessWidget {
   final double width;
   final double thickness;
 
-  CustomLoader({this.width = 12, this.thickness = 2});
+  CustomLoader({this.width = 24, this.thickness = 3});
 
   @override
   Widget build(BuildContext context) {
